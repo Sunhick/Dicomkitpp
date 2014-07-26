@@ -64,11 +64,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="DataElement.h" />
+    <ClInclude Include="DataSet.h" />
     <ClInclude Include="DicomReader.h" />
+    <ClInclude Include="DicomTag.h" />
     <ClInclude Include="InvalidDicomFileException.h" />
     <ClInclude Include="ValueRepresentation.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DataElement.cpp" />
+    <ClCompile Include="DataSet.cpp" />
     <ClCompile Include="DicomReader.cpp" />
     <ClCompile Include="InvalidDicomFileException.cpp" />
   </ItemGroup>

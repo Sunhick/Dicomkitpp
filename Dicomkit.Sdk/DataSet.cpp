@@ -13,32 +13,43 @@
 // You should have received a copy of the GNU General Public License
 // along with DicomKit.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef DICOM_DUMP_H
-#define DICOM_DUMP_H 
-
 #include <string>
 
-#include "..\Dicomkit.Sdk\DicomReader.h"
+#include "DataSet.h"
 
 using namespace std;
 using namespace Dicomkit::Sdk;
 
-namespace Dicomkit {
-	namespace Dump {
-
-		class DicomDump
-		{
-		private:
-			string fileName;
-			DicomReader* dicomReader;
-
-			string GetLog(short groupId, short elementId, char* valType);
-		public:
-			DicomDump(string fileName);
-			~DicomDump(void);
-			void Dump();
-		};
-	}
+DataSet::DataSet(void)
+{
 }
 
-#endif
+
+DataSet::~DataSet(void)
+{
+}
+
+void DataSet::SetPreamble(char* preamble)
+{
+	memcpy(this->preamble,preamble,128);
+}
+
+void DataSet::SetPrefix(char* prefix)
+{
+	memcpy(this->prefix, prefix,4);
+}
+
+void DataSet::AddDataElement(DataElement dataElement)
+{
+	this->dataElement.push_back(new DataElement(dataElement));
+}
+
+void DataSet::AddDataElement(DataElement* dataElement)
+{
+	this->dataElement.push_back(dataElement);
+}
+
+void DataSet::RemoveDataElement(DataElement* dataElement)
+{
+	this->dataElement.remove(dataElement);	
+}

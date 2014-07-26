@@ -24,12 +24,27 @@
     <ClInclude Include="ValueRepresentation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DataSet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DataElement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DicomTag.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DicomReader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="InvalidDicomFileException.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DataSet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DataElement.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

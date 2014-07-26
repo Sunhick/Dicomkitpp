@@ -55,6 +55,56 @@ bool DicomReader::IsValidDicomFile()
 	return (strcmp(dicm.c_str(),"DICM") == 0);
 }
 
+DataSet DicomReader::ParseDicom()
+{
+	DataSet dataSet;
+
+	//preamble
+	char preamble[128];
+	reader->read(preamble,128);
+	dataSet.SetPreamble(preamble);
+
+	//check next 4bytes for "DICM"
+	if(!IsValidDicomFile()) 
+		throw new InvalidDicomFileException("Not a valid DICOM file");
+
+	dataSet.SetPrefix("DICM");
+
+	//read Data elements in Dataset
+	while(!reader->eof()) {
+
+		//read group Id
+		short groupId = ReadShort();
+
+		//read element Id
+		short elementId = ReadShort();
+
+		//value type
+		short valueType = ReadShort();//ReadString(2);
+
+		bool isImplicitVr = false;
+		if(valueType == OB || valueType == OW || valueType == SQ || valueType == UN) {
+			reader->seekg(2, ios::cur);
+			isImplicitVr = true;
+		}
+
+		//value length
+		int valLen = ReadInt(isImplicitVr ? 4 : 2);
+
+		//value
+		unsigned char* data = ReadBytes(valLen > 0 ? valLen : 0);
+
+		DataElement dataElement;
+		dataElement.SetDicomTag(DicomTag(groupId,elementId));
+		dataElement.SetData(valueType,valLen,data);
+
+		dataSet.AddDataElement(dataElement);
+	}
+
+
+	return dataSet;
+}
+
 void DicomReader::Dump()
 {
 	//skip preamble : 128 bits at the begining
@@ -240,7 +290,7 @@ int DicomReader::ReadInt(int count = 4)
 {
 	unsigned char* bytes = ReadBytes(count);
 
-	int value;
+	unsigned int value;
 	if(count == 4) {
 		value = bytes[3] << 32 | bytes[2] << 16 | bytes[1] << 8 | bytes[0];
 	}

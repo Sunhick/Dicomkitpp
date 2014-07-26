@@ -13,32 +13,24 @@
 // You should have received a copy of the GNU General Public License
 // along with DicomKit.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef DICOM_DUMP_H
-#define DICOM_DUMP_H 
-
-#include <string>
-
-#include "..\Dicomkit.Sdk\DicomReader.h"
-
-using namespace std;
-using namespace Dicomkit::Sdk;
+#ifndef DICOM_TAG
+#define DICOM_TAG
 
 namespace Dicomkit {
-	namespace Dump {
-
-		class DicomDump
+	namespace Sdk {
+		struct DicomTag
 		{
-		private:
-			string fileName;
-			DicomReader* dicomReader;
+			DicomTag(){}
 
-			string GetLog(short groupId, short elementId, char* valType);
-		public:
-			DicomDump(string fileName);
-			~DicomDump(void);
-			void Dump();
+			DicomTag(short groupId, short elementId) {
+				this->GroupId = groupId;
+				this->ElementId = elementId;
+			}
+
+			short GroupId;
+			short ElementId;
 		};
+
 	}
 }
-
 #endif

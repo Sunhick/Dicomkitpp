@@ -16,6 +16,8 @@
 #ifndef DICOM_READER_H
 #define DICOM_READER_H
 
+#include "DataSet.h"
+
 #include <string>
 #include <iostream>
 #include <fstream>
@@ -43,7 +45,9 @@ namespace Dicomkit {
 		public:
 			DicomReader(string fileName);
 			~DicomReader(void);
+
 			void Dump();
+			DataSet ParseDicom();
 		};
 
 	}
