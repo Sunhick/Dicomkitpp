@@ -22,9 +22,17 @@ using namespace Dicomkit::Dump;
 
 int main(int argc, char** argv) 
 {
+	if(argc < 2)
+	{
+		cout<<"usage : "<<endl;
+		cout<<"Dicomkit.Dump.exe [dicom file]"<<endl;
+		return 0;
+	}
+
 	try
 	{
-		DicomDump *dcmDump = new DicomDump("G:\\code\\Dicomkit++\\Debug\\image");
+		char* dcmFile = argv[1];
+		DicomDump *dcmDump = new DicomDump(dcmFile);
 		dcmDump->Dump();
 	}
 	catch(exception e)

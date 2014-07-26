@@ -119,8 +119,11 @@ void DicomReader::Dump()
 			}
 			break;
 		case AE:
-			message = GetLog(groupId,elementId, "AE");
-			cout<<message<<endl;
+			{
+				message = GetLog(groupId,elementId, "AE");
+				string uid((char*)data, valLen);
+				cout<<message<<uid.c_str()<<endl;
+			}
 			break;
 		case CS:
 			{
@@ -221,6 +224,8 @@ void DicomReader::Dump()
 
 		delete data;
 	}
+
+	cout<<"End of file"<<endl;
 }
 
 string DicomReader::GetLog(short groupId, short elementId, char* valType)
@@ -236,12 +241,10 @@ int DicomReader::ReadInt(int count = 4)
 	unsigned char* bytes = ReadBytes(count);
 
 	int value;
-	if(count == 4)
-	{
+	if(count == 4) {
 		value = bytes[3] << 32 | bytes[2] << 16 | bytes[1] << 8 | bytes[0];
 	}
-	else 
-	{
+	else {
 		value = bytes[1] << 8 | bytes[0];
 	}
 
