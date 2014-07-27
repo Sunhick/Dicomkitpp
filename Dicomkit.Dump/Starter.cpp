@@ -33,7 +33,8 @@ int main(int argc, char** argv)
 	{
 		char* dcmFile = argv[1];
 		DicomDump *dcmDump = new DicomDump(dcmFile);
-		dcmDump->Dump();
+
+		dcmDump->Dump(cout);
 	}
 	catch(exception e)
 	{

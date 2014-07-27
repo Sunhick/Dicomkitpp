@@ -53,3 +53,8 @@ void DataSet::RemoveDataElement(DataElement* dataElement)
 {
 	this->dataElement.remove(dataElement);	
 }
+
+list<DataElement*> DataSet::GetDataElement()
+{
+	return this->dataElement;
+}

@@ -32,15 +32,16 @@ DicomDump::~DicomDump(void)
 {
 }
 
-void DicomDump::Dump()
+void DicomDump::Dump(ostream& out)
 {
-	cout<<"Dumping dicom contents..."<<endl;
+    out<<"Dumping dicom contents..."<<endl;
 	//this->dicomReader->Dump();
 
 	DataSet dataSet = this->dicomReader->ParseDicom();
+	list<DataElement*> dataElements = dataSet.GetDataElement();
 
-	for (list<DataElement*>::iterator dataElement = dataSet.dataElement.begin(); 
-		dataElement != dataSet.dataElement.end(); 
+	for (list<DataElement*>::iterator dataElement = dataElements.begin(); 
+		dataElement != dataElements.end(); 
 		++dataElement) {
 
 			string message;
@@ -56,94 +57,94 @@ void DicomDump::Dump()
 					unsigned char* data= (*dataElement)->GetValueField();
 					unsigned long ulong = data[0] | data[1] << 8 | data[2] << 16 | data[3] << 24;
 					message = GetLog(groupId,elementId, "UL");
-					cout<<message<<ulong<<endl;
+					out<<message<<ulong<<endl;
 				}
 				break;
 			case OB:
 				{
 					message = GetLog(groupId,elementId, "OB");
-					cout<<message<<endl;
+					out<<message<<endl;
 				}
 				break;
 			case UI:
 				{
 					message = GetLog(groupId,elementId, "UI");
 					string uid((char*)(*dataElement)->GetValueField(), valLen);
-					cout<<message<<uid.c_str()<<endl;
+					out<<message<<uid.c_str()<<endl;
 				}
 				break;
 			case SH:
 				{
 					message = GetLog(groupId,elementId, "SH");
 					string uid((char*)(*dataElement)->GetValueField(), valLen);
-					cout<<message<<uid.c_str()<<endl;
+					out<<message<<uid.c_str()<<endl;
 				}
 				break;
 			case AE:
 				{
 					message = GetLog(groupId,elementId, "AE");
 					string uid((char*)(*dataElement)->GetValueField(), valLen);
-					cout<<message<<uid.c_str()<<endl;
+					out<<message<<uid.c_str()<<endl;
 				}
 				break;
 			case CS:
 				{
 					message = GetLog(groupId,elementId, "CS");
 					string uid((char*)(*dataElement)->GetValueField(), valLen);
-					cout<<message<<uid.c_str()<<endl;
+					out<<message<<uid.c_str()<<endl;
 				}
 				break;
 			case DA:
 				{
 					message = GetLog(groupId,elementId, "DA");
 					string uid((char*)(*dataElement)->GetValueField(), valLen);
-					cout<<message<<uid.c_str()<<endl;
+					out<<message<<uid.c_str()<<endl;
 				}
 				break;
 			case TM:
 				{
 					message = GetLog(groupId,elementId, "TM");
 					string uid((char*)(*dataElement)->GetValueField(), valLen);
-					cout<<message<<uid.c_str()<<endl;
+					out<<message<<uid.c_str()<<endl;
 				}
 				break;
 			case LO:
 				{
 					message = GetLog(groupId,elementId, "LO");
 					string uid((char*)(*dataElement)->GetValueField(), valLen);
-					cout<<message<<uid.c_str()<<endl;
+					out<<message<<uid.c_str()<<endl;
 				}
 				break;
 			case PN:
 				{
 					message = GetLog(groupId,elementId, "PN");
 					string uid((char*)(*dataElement)->GetValueField(), valLen);
-					cout<<message<<uid.c_str()<<endl;
+					out<<message<<uid.c_str()<<endl;
 				}
 				break;
 			case SQ:
 				message = GetLog(groupId,elementId, "SQ");
-				cout<<message<<endl;
+				out<<message<<endl;
 				break;
 			case AS:
 				{
 					message = GetLog(groupId,elementId, "AS");
 					string uid((char*)(*dataElement)->GetValueField(), valLen);
-					cout<<message<<uid.c_str()<<endl;
+					out<<message<<uid.c_str()<<endl;
 				}
 				break;
 			case DS:
 				{
 					message = GetLog(groupId,elementId, "DS");
 					string uid((char*)(*dataElement)->GetValueField(), valLen);
-					cout<<message<<uid.c_str()<<endl;
+					out<<message<<uid.c_str()<<endl;
 				}
 				break;
 			case IS:
 				{
 					message = GetLog(groupId,elementId, "IS");
 					string uid((char*)(*dataElement)->GetValueField(), valLen);
-					cout<<message<<uid.c_str()<<endl;
+					out<<message<<uid.c_str()<<endl;
 				}
 				break;
 			case US:
@@ -151,26 +152,26 @@ void DicomDump::Dump()
 					unsigned char* data = (*dataElement)->GetValueField();
 					short us = data[1] << 8 | data[0];
 					message = GetLog(groupId,elementId, "US");
-					cout<<message<<us<<endl;
+					out<<message<<us<<endl;
 				}
 				break;
 			case LT:
 				{
 					message = GetLog(groupId,elementId, "LT");
 					string uid((char*)(*dataElement)->GetValueField(), valLen);
-					cout<<message<<uid.c_str()<<endl;
+					out<<message<<uid.c_str()<<endl;
 				}
 				break;
 			case ST:
 				{
 					message = GetLog(groupId,elementId, "ST");
 					string uid((char*)(*dataElement)->GetValueField(), valLen);
-					cout<<message<<uid.c_str()<<endl;
+					out<<message<<uid.c_str()<<endl;
 				}
 				break;
 			case OW:
 				message = GetLog(groupId,elementId, "OW");
-				cout<<message<<endl;
+				out<<message<<endl;
 				break;
 			default :
 				{
@@ -182,7 +183,7 @@ void DicomDump::Dump()
 
 					char buf[20];
 					sprintf_s(buf, sizeof(buf),"(%04x,%04x)",at1,at2);
-					cout<<message<<buf<<endl;
+					out<<message<<buf<<endl;
 				}
 			}
 	}

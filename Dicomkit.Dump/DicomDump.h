@@ -36,7 +36,7 @@ namespace Dicomkit {
 		public:
 			DicomDump(string fileName);
 			~DicomDump(void);
-			void Dump();
+			void Dump(ostream& out);
 		};
 	}
 }
