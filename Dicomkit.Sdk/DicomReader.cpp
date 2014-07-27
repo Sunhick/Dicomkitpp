@@ -99,6 +99,8 @@ DataSet DicomReader::ParseDicom()
 		dataElement.SetData(valueType,valLen,data);
 
 		dataSet.AddDataElement(dataElement);
+
+		delete[] data;
 	}
 
 
@@ -272,7 +274,7 @@ void DicomReader::Dump()
 			}
 		}
 
-		delete data;
+		delete[] data;
 	}
 
 	cout<<"End of file"<<endl;

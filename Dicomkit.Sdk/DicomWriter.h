@@ -13,41 +13,35 @@
 // You should have received a copy of the GNU General Public License
 // along with DicomKit.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <exception>
+#ifndef DICOM_WRITER_H
+#define DICOM_WRITER_H
 
-#include "DicomDump.h"
-#include "..\Dicomkit.Sdk\DicomWriter.h"
+#include <string>
+#include <iostream>
+#include <fstream>
+
+#include "DataSet.h"
 
 using namespace std;
-using namespace Dicomkit::Dump;
 
-int main(int argc, char** argv) 
-{
-	if(argc < 2)
-	{
-		cout<<"usage : "<<endl;
-		cout<<"Dicomkit.Dump.exe [dicom file]"<<endl;
-		return 0;
+namespace Dicomkit {
+	namespace Sdk {
+		class DicomWriter
+		{
+		private:
+			DataSet* dataSet;
+			void Init();
+
+			void WriteHeader(ofstream& dicomStream, DataSet* dataSet);
+			void WriteDataElements(ofstream& dicomStream, DataSet* dataSet);
+		public:
+			DicomWriter(void);
+			~DicomWriter(void);
+
+			void AddDataElement(DataElement dataElement);
+			void Save(string fileName);
+			void Save(DataSet* dataSet, string fileName);
+		};
 	}
-
-	try
-	{
-		char* dcmFile = argv[1];
-		DicomDump *dcmDump = new DicomDump(dcmFile);
-		dcmDump->Dump(cout);
-
-		//DicomReader reader(dcmFile);
-		//DataSet ds = reader.ParseDicom();
-
-		//DicomWriter writer;
-		//writer.Save(&ds,"G:\\image.dcm");
-	}
-	catch(exception e)
-	{
-		cout<<e.what()<<endl;
-	}
-
-	cout<<"Press any key to continue..."<<endl;
-	cin.get();
-	return 0;
 }
+#endif

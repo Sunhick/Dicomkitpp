@@ -58,3 +58,13 @@ list<DataElement*> DataSet::GetDataElement()
 {
 	return this->dataElement;
 }
+
+char* DataSet::GetPreamble()
+{
+	return this->preamble;
+}
+
+char* DataSet::GetPrefix()
+{
+	return this->prefix;
+}

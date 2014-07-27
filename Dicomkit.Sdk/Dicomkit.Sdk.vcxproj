@@ -68,6 +68,7 @@
     <ClInclude Include="DataSet.h" />
     <ClInclude Include="DicomReader.h" />
     <ClInclude Include="DicomTag.h" />
+    <ClInclude Include="DicomWriter.h" />
     <ClInclude Include="InvalidDicomFileException.h" />
     <ClInclude Include="ValueRepresentation.h" />
   </ItemGroup>
@@ -75,6 +76,7 @@
     <ClCompile Include="DataElement.cpp" />
     <ClCompile Include="DataSet.cpp" />
     <ClCompile Include="DicomReader.cpp" />
+    <ClCompile Include="DicomWriter.cpp" />
     <ClCompile Include="InvalidDicomFileException.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

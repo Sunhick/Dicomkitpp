@@ -38,6 +38,8 @@ namespace Dicomkit {
 
 			void SetPreamble(char* preamble);
 			void SetPrefix(char* prefix);
+			char* GetPreamble();
+			char* GetPrefix();
 
 			void AddDataElement(DataElement dataElement);
 			void AddDataElement(DataElement* dataElement);

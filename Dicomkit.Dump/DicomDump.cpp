@@ -34,7 +34,7 @@ DicomDump::~DicomDump(void)
 
 void DicomDump::Dump(ostream& out)
 {
-    out<<"Dumping dicom contents..."<<endl;
+	out<<"Dumping dicom contents..."<<endl;
 	//this->dicomReader->Dump();
 
 	DataSet dataSet = this->dicomReader->ParseDicom();
