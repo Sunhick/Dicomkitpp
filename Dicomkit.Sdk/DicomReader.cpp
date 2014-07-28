@@ -294,7 +294,7 @@ int DicomReader::ReadInt(int count = 4)
 
 	unsigned int value;
 	if(count == 4) {
-		value = bytes[3] << 32 | bytes[2] << 16 | bytes[1] << 8 | bytes[0];
+		value = bytes[3] << 24 | bytes[2] << 16 | bytes[1] << 8 | bytes[0];
 	}
 	else {
 		value = bytes[1] << 8 | bytes[0];
