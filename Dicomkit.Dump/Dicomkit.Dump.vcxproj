@@ -67,11 +67,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="DicomDump.cpp" />
-    <ClCompile Include="packages.config" />
     <ClCompile Include="Starter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DicomDump.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
