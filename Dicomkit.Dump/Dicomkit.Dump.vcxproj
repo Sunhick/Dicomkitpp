@@ -67,6 +67,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="DicomDump.cpp" />
+    <ClCompile Include="packages.config" />
     <ClCompile Include="Starter.cpp" />
   </ItemGroup>
   <ItemGroup>

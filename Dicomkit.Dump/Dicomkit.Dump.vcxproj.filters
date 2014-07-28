@@ -21,6 +21,9 @@
     <ClCompile Include="DicomDump.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="packages.config">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DicomDump.h">
