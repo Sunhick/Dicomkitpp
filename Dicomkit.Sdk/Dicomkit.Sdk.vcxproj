@@ -70,6 +70,7 @@
     <ClInclude Include="DicomTag.h" />
     <ClInclude Include="DicomWriter.h" />
     <ClInclude Include="InvalidDicomFileException.h" />
+    <ClInclude Include="TransferSyntax.h" />
     <ClInclude Include="ValueRepresentation.h" />
   </ItemGroup>
   <ItemGroup>
@@ -78,6 +79,7 @@
     <ClCompile Include="DicomReader.cpp" />
     <ClCompile Include="DicomWriter.cpp" />
     <ClCompile Include="InvalidDicomFileException.cpp" />
+    <ClCompile Include="TransferSyntax.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

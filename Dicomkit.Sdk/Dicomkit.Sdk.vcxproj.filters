@@ -36,6 +36,9 @@
     <ClInclude Include="DicomWriter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="TransferSyntax.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DicomReader.cpp">
@@ -51,6 +54,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DicomWriter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TransferSyntax.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
