@@ -9,5 +9,4 @@ before_install:
   - export EnableNuGetPackageRestore=true
 
 script:
-  - cd src/
-  - xbuild Dicomkit++.sln
+  - xbuild "Dicomkit++.sln"
