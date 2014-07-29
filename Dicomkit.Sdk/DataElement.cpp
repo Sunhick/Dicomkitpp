@@ -71,3 +71,23 @@ DicomTag  DataElement::GetDicomTag()
 {
 	return this->dicomTag;
 }
+
+void DataElement::AddDataElement(DataElement dataElement)
+{
+	this->dataElements.push_back((new DataElement(dataElement)));
+}
+
+void DataElement::AddDataElement(DataElement* dataElement)
+{
+	this->dataElements.push_back(dataElement);
+}
+
+void DataElement::RemoveDataElement(DataElement* dataElement)
+{
+	this->dataElements.remove(dataElement);
+}
+
+list<DataElement*> DataElement::GetDataElements()
+{
+	return this->dataElements;
+}

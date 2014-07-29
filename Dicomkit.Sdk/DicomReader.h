@@ -16,11 +16,11 @@
 #ifndef DICOM_READER_H
 #define DICOM_READER_H
 
-#include "DataSet.h"
-
 #include <string>
 #include <iostream>
 #include <fstream>
+
+#include "DataSet.h"
 
 using namespace std;
 
@@ -42,6 +42,7 @@ namespace Dicomkit {
 			short ReadShort();
 			int ReadInt(int count);
 
+			DataElement* ParseDataElement();
 		public:
 			DicomReader(string fileName);
 			~DicomReader(void);

@@ -72,39 +72,55 @@ DataSet DicomReader::ParseDicom()
 
 	//read Data elements in Dataset
 	while(!reader->eof()) {
-
-		//read group Id
-		short groupId = ReadShort();
-
-		//read element Id
-		short elementId = ReadShort();
-
-		//value type
-		short valueType = ReadShort();//ReadString(2);
-
-		bool isImplicitVr = false;
-		if(valueType == OB || valueType == OW || valueType == SQ || valueType == UN) {
-			reader->seekg(2, ios::cur);
-			isImplicitVr = true;
-		}
-
-		//value length
-		int valLen = ReadInt(isImplicitVr ? 4 : 2);
-
-		//value
-		unsigned char* data = ReadBytes(valLen > 0 ? valLen : 0);
-
-		DataElement dataElement;
-		dataElement.SetDicomTag(DicomTag(groupId,elementId));
-		dataElement.SetData(valueType,valLen,data);
-
+		DataElement* dataElement = ParseDataElement();
 		dataSet.AddDataElement(dataElement);
-
-		delete[] data;
 	}
 
 
 	return dataSet;
+}
+
+DataElement* DicomReader::ParseDataElement()
+{
+	//read group Id
+	short groupId = ReadShort();
+
+	//read element Id
+	short elementId = ReadShort();
+
+	//value type
+	short valueType = ReadShort();//ReadString(2);
+
+	bool isImplicitVr = false;
+	if (valueType == OB || valueType == OW || valueType == SQ || valueType == UN) {
+		reader->seekg(2, ios::cur);
+		isImplicitVr = true;
+	}
+
+	DataElement* dataElement = new DataElement;
+	dataElement->SetDicomTag(DicomTag(groupId, elementId));
+
+	//value length
+	int valLen = ReadInt(isImplicitVr ? 4 : 2);
+
+	//For item sequences
+	if (valueType == SQ) {
+		int limit = valLen + reader->tellg();
+
+		while (reader->tellg() < limit) {
+			DataElement* de = ParseDataElement();
+			dataElement->AddDataElement(de);
+		}
+		valLen = 0; //read no data for SQ
+	}
+
+	//value
+	unsigned char* data = ReadBytes(valLen > 0 ? valLen : 0);
+
+	dataElement->SetData(valueType, valLen, data);
+
+	delete[] data;
+	return dataElement;
 }
 
 void DicomReader::Dump()

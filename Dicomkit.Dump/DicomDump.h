@@ -17,6 +17,7 @@
 #define DICOM_DUMP_H 
 
 #include <string>
+#include <list>
 
 #include "..\Dicomkit.Sdk\DicomReader.h"
 
@@ -33,6 +34,7 @@ namespace Dicomkit {
 			DicomReader* dicomReader;
 
 			string GetLog(short groupId, short elementId, char* valType);
+			void DumpLog(list<DataElement*> dataElement, ostream& out);
 		public:
 			DicomDump(string fileName);
 			~DicomDump(void);

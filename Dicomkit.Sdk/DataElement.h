@@ -16,7 +16,10 @@
 #ifndef DATA_ELEMENT_H
 #define DATA_ELEMENT_H
 
+#include <list>
 #include "DicomTag.h"
+
+using namespace std;
 
 namespace Dicomkit {
 	namespace Sdk {
@@ -27,6 +30,7 @@ namespace Dicomkit {
 			short valueType;
 			int valueLength;
 			unsigned char* valueField;
+			list<DataElement*> dataElements;	//Sequence items(SQ)
 		public:
 			DataElement(void);
 			DataElement(const DataElement& dataElement);
@@ -36,9 +40,14 @@ namespace Dicomkit {
 			int GetValueLength();
 			short GetValueType();
 			DicomTag GetDicomTag();
+			list<DataElement*> GetDataElements();
 
 			void SetDicomTag(DicomTag tag);
 			void SetData(short valueType, int valueLength, unsigned char* valueField);
+			
+			void AddDataElement(DataElement dataElement);
+			void AddDataElement(DataElement* dataElement);
+			void RemoveDataElement(DataElement* dataElement);
 		};
 
 	}
