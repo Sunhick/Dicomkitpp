@@ -22,13 +22,13 @@ namespace Dicomkit {
 		{
 			DicomTag(){}
 
-			DicomTag(short groupId, short elementId) {
+			DicomTag(unsigned short groupId, unsigned short elementId) {
 				this->GroupId = groupId;
 				this->ElementId = elementId;
 			}
 
-			short GroupId;
-			short ElementId;
+			unsigned short GroupId;
+			unsigned short ElementId;
 		};
 
 	}

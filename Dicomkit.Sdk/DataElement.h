@@ -27,7 +27,7 @@ namespace Dicomkit {
 		{
 		private:
 			DicomTag dicomTag;
-			short valueType;
+			unsigned short valueType;
 			int valueLength;
 			unsigned char* valueField;
 			list<DataElement*> dataElements;	//Sequence items(SQ)

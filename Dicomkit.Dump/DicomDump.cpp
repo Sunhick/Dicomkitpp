@@ -51,9 +51,9 @@ void DicomDump::DumpLog(list<DataElement*> dataElements, ostream& out)
 
 			DataElement* dataElement = *dataElement1;
 
-			short valueType = dataElement->GetValueType();
-			short groupId = dataElement->GetDicomTag().GroupId;
-			short elementId = dataElement->GetDicomTag().ElementId;
+			unsigned short valueType = dataElement->GetValueType();
+			unsigned short groupId = dataElement->GetDicomTag().GroupId;
+			unsigned short elementId = dataElement->GetDicomTag().ElementId;
 			int valLen = dataElement->GetValueLength();
 
 			//skip Item sequence.
