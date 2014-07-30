@@ -1,4 +1,4 @@
-Dicomkitpp  [![Build Status](https://travis-ci.org/Sunhick/Dicomkitpp.svg?branch=master)](https://travis-ci.org/Sunhick/Dicomkitpp)
+Dicomkit++  [![Build Status](https://travis-ci.org/Sunhick/Dicomkitpp.svg?branch=master)](https://travis-ci.org/Sunhick/Dicomkitpp)
 ==========
 
 Dicomkit++ sdk and tools  
