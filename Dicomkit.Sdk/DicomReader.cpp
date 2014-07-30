@@ -71,19 +71,23 @@ DataSet DicomReader::ParseDicom()
 
 	dataSet.SetPrefix("DICM");
 
-	PopulateFileMetaData(dataSet, syntax);
+	ReadFileMetaData(dataSet, syntax);
 
-	//read Data elements in Dataset
-	while(!reader->eof()) {
-		DataElement* dataElement = ParseDataElement();
-		dataSet.AddDataElement(dataElement);
+	if(!syntax.IsImplicitVr() && syntax.IsLittleEndian() ) {
+		//read Data elements in Dataset
+		while(!reader->eof()) {
+			DataElement* dataElement = ParseDataElement();
+			dataSet.AddDataElement(dataElement);
+		}
+	} else {
+		throw exception("Not implemented! Currently Explicit and Little endian encoded Dicom images are parsed.");
 	}
 
 
 	return dataSet;
 }
 
-void DicomReader::PopulateFileMetaData(DataSet& dataSet, TransferSyntax& syntax)
+void DicomReader::ReadFileMetaData(DataSet& dataSet, TransferSyntax& syntax)
 {
 	while (!reader->eof()) {
 		//read dicom tag
@@ -91,6 +95,7 @@ void DicomReader::PopulateFileMetaData(DataSet& dataSet, TransferSyntax& syntax)
 
 		if (tag.GroupId != 0x0002) { //read only Meta data tags(0002,eeee)
 			int pos = reader->tellg();
+			//undo the file pointer increment by 1 dicom tag(4bytes)
 			reader->seekg(pos - 4, ios::beg);
 			break;
 		}
@@ -98,19 +103,14 @@ void DicomReader::PopulateFileMetaData(DataSet& dataSet, TransferSyntax& syntax)
 		//value type
 		short valueType = ReadShort();
 
-		bool isImplicitVr = false;
-		if (valueType == OB || valueType == OW || valueType == SQ || valueType == UN) {
-			isImplicitVr = true;
-			reader->seekg(2, ios::cur);
-		}
-
 		//value length
-		int valLen = ReadInt(isImplicitVr ? 4 : 2);
+		int valLen = ReadValueLength(valueType);
 
 		//value
 		unsigned char* data = ReadBytes(valLen > 0 ? valLen : 0);
 
-		if (tag.GroupId == 0x0002 && tag.ElementId == 0x0010) {
+		if (tag == TransferSyntax::GetTransferSyntaxTag()) {
+			//set transfer syntax.
 			syntax.SetTransferSyntaxUid(string((char*)data, valLen));
 		}
 
@@ -123,6 +123,30 @@ void DicomReader::PopulateFileMetaData(DataSet& dataSet, TransferSyntax& syntax)
 	}
 }
 
+int DicomReader::ReadValueLength(short valueType) 
+{
+	//value length count in bytes
+	int vlSize = 0;
+	int skip = 0;
+
+	switch (valueType) {
+	case OB:
+	case OW:
+	case SQ:
+	case UN:
+		skip = 2;	//reserved bytes
+		vlSize = 4;	//value length size
+		break;
+	default:
+		vlSize = 2; //4 bytes in case of implicit
+		break;
+	}
+
+	if(skip > 0) reader->seekg(2, ios::cur);
+
+	return ReadInt(vlSize);
+}
+
 DataElement* DicomReader::ParseDataElement()
 {
 	//read dicom tag
@@ -131,17 +155,11 @@ DataElement* DicomReader::ParseDataElement()
 	//value type
 	short valueType = ReadShort();//ReadString(2);
 
-	bool isImplicitVr = false;
-	if (valueType == OB || valueType == OW || valueType == SQ || valueType == UN) {
-		isImplicitVr = true;
-		reader->seekg(2, ios::cur);
-	}
+	//value length
+	int valLen = ReadValueLength(valueType);
 
 	DataElement* dataElement = new DataElement;
 	dataElement->SetDicomTag(tag);
-
-	//value length
-	int valLen = ReadInt(isImplicitVr ? 4 : 2);
 
 	//For item sequences
 	if (valueType == SQ) {
@@ -166,10 +184,10 @@ DataElement* DicomReader::ParseDataElement()
 DicomTag DicomReader::ReadDicomTag()
 {
 	//read group Id
-	short groupId = ReadShort();
+	unsigned short groupId = ReadShort();
 
 	//read element Id
-	short elementId = ReadShort();
+	unsigned short elementId = ReadShort();
 
 	return DicomTag(groupId, elementId);
 }
@@ -187,10 +205,10 @@ void DicomReader::Dump()
 	while(!reader->eof()) {
 
 		//read group Id
-		short groupId = ReadShort();
+		unsigned short groupId = ReadShort();
 
 		//read element Id
-		short elementId = ReadShort();
+		unsigned short elementId = ReadShort();
 
 		//value type
 		short valueType = ReadShort();//ReadString(2);

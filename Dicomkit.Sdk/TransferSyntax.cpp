@@ -16,7 +16,9 @@
 
 using namespace Dicomkit::Sdk;
 
-TransferSyntax::TransferSyntax(void)
+TransferSyntax::TransferSyntax(void) 
+	: isLittleEndian(true),
+	isImplicitVr(true)
 {
 }
 
@@ -24,6 +26,8 @@ TransferSyntax::TransferSyntax(void)
 TransferSyntax::~TransferSyntax(void)
 {
 }
+
+DicomTag TransferSyntax::transferTag = DicomTag(0x0002,0x0010);
 
 bool TransferSyntax::IsImplicitVr()
 {
@@ -33,11 +37,6 @@ bool TransferSyntax::IsImplicitVr()
 bool TransferSyntax::IsLittleEndian()
 {
 	return this->isLittleEndian;
-}
-
-DicomTag TransferSyntax::GetTransferSyntaxTag()
-{
-	return this->transferTag;
 }
 
 string TransferSyntax::GetTransferSyntaxUid()
@@ -62,4 +61,9 @@ void TransferSyntax::SetTransferSyntaxUid(string uid)
 		sprintf_s(buf,"%s is not supported Dicom transfer syntax!",Deflated_Explicit_VR_Little_Endian);
 		throw NotSupportedTransferSyntax(buf);
 	}
+}
+
+DicomTag TransferSyntax::GetTransferSyntaxTag()
+{
+	return transferTag;
 }

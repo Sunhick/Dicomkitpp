@@ -36,16 +36,16 @@ namespace Dicomkit {
 
 			bool IsValidDicomFile();
 			bool FileExists(const std::string& name);
-
 			string GetLog(short groupId, short elementId, char* valType);
 			unsigned char* ReadBytes(int count);
 			string ReadString(int count);
 			short ReadShort();
 			int ReadInt(int count);
-
+			int ReadValueLength(short valueType);
 			DicomTag ReadDicomTag();
-			void PopulateFileMetaData(DataSet& dataSet, TransferSyntax& syntax);
+			void ReadFileMetaData(DataSet& dataSet, TransferSyntax& syntax);
 			DataElement* ParseDataElement();
+
 		public:
 			DicomReader(string fileName);
 			~DicomReader(void);

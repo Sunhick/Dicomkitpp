@@ -29,6 +29,10 @@ namespace Dicomkit {
 
 			unsigned short GroupId;
 			unsigned short ElementId;
+
+			bool operator==(DicomTag tag) {
+				return (tag.GroupId == this->GroupId && tag.ElementId == this->ElementId);
+			}
 		};
 
 	}

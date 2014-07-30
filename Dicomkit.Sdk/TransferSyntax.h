@@ -60,15 +60,16 @@ namespace Dicomkit {
 		private:
 			bool isImplicitVr;
 			bool isLittleEndian;
-			DicomTag transferTag;
 			string transferSyntaxUid;
+			static DicomTag transferTag;
 		public:
 			TransferSyntax(void);
 			~TransferSyntax(void);
 
+			static DicomTag GetTransferSyntaxTag();
+
 			bool IsImplicitVr();
 			bool IsLittleEndian();
-			DicomTag GetTransferSyntaxTag();
 			string GetTransferSyntaxUid();
 			void SetTransferSyntaxUid(string uid);
 		};
