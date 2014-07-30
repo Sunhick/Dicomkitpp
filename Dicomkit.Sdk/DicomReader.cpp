@@ -58,6 +58,7 @@ bool DicomReader::IsValidDicomFile()
 DataSet DicomReader::ParseDicom()
 {
 	DataSet dataSet;
+	TransferSyntax syntax;
 
 	//preamble
 	char preamble[128];
@@ -70,6 +71,8 @@ DataSet DicomReader::ParseDicom()
 
 	dataSet.SetPrefix("DICM");
 
+	PopulateFileMetaData(dataSet, syntax);
+
 	//read Data elements in Dataset
 	while(!reader->eof()) {
 		DataElement* dataElement = ParseDataElement();
@@ -80,25 +83,62 @@ DataSet DicomReader::ParseDicom()
 	return dataSet;
 }
 
+void DicomReader::PopulateFileMetaData(DataSet& dataSet, TransferSyntax& syntax)
+{
+	while (!reader->eof()) {
+		//read dicom tag
+		DicomTag tag = ReadDicomTag();
+
+		if (tag.GroupId != 0x0002) { //read only Meta data tags(0002,eeee)
+			int pos = reader->tellg();
+			reader->seekg(pos - 4, ios::beg);
+			break;
+		}
+
+		//value type
+		short valueType = ReadShort();
+
+		bool isImplicitVr = false;
+		if (valueType == OB || valueType == OW || valueType == SQ || valueType == UN) {
+			isImplicitVr = true;
+			reader->seekg(2, ios::cur);
+		}
+
+		//value length
+		int valLen = ReadInt(isImplicitVr ? 4 : 2);
+
+		//value
+		unsigned char* data = ReadBytes(valLen > 0 ? valLen : 0);
+
+		if (tag.GroupId == 0x0002 && tag.ElementId == 0x0010) {
+			syntax.SetTransferSyntaxUid(string((char*)data, valLen));
+		}
+
+		DataElement* dataElement = new DataElement;
+		dataElement->SetDicomTag(tag);
+		dataElement->SetData(valueType, valLen, data);
+
+		dataSet.AddDataElement(dataElement);
+		delete[] data;
+	}
+}
+
 DataElement* DicomReader::ParseDataElement()
 {
-	//read group Id
-	short groupId = ReadShort();
-
-	//read element Id
-	short elementId = ReadShort();
+	//read dicom tag
+	DicomTag tag = ReadDicomTag();
 
 	//value type
 	short valueType = ReadShort();//ReadString(2);
 
 	bool isImplicitVr = false;
 	if (valueType == OB || valueType == OW || valueType == SQ || valueType == UN) {
-		reader->seekg(2, ios::cur);
 		isImplicitVr = true;
+		reader->seekg(2, ios::cur);
 	}
 
 	DataElement* dataElement = new DataElement;
-	dataElement->SetDicomTag(DicomTag(groupId, elementId));
+	dataElement->SetDicomTag(tag);
 
 	//value length
 	int valLen = ReadInt(isImplicitVr ? 4 : 2);
@@ -121,6 +161,17 @@ DataElement* DicomReader::ParseDataElement()
 
 	delete[] data;
 	return dataElement;
+}
+
+DicomTag DicomReader::ReadDicomTag()
+{
+	//read group Id
+	short groupId = ReadShort();
+
+	//read element Id
+	short elementId = ReadShort();
+
+	return DicomTag(groupId, elementId);
 }
 
 void DicomReader::Dump()
@@ -283,7 +334,7 @@ void DicomReader::Dump()
 				message = GetLog(groupId,elementId, "AT");
 				int at1 = data[1] << 8 | data[0];
 				int at2 = data[3] << 8 | data[2];
-				
+
 				char buf[20];
 				sprintf_s(buf, sizeof(buf),"(%04x,%04x)",at1,at2);
 				cout<<message<<buf<<endl;

@@ -36,11 +36,12 @@
 #define LT 0x544c
 #define OW 0x574f
 #define ST 0x5453
-
-//FIXME: set the correct values for below types
-#define UN 0x0000
-#define OF 0x0002
-#define DT 0x0003
-#define AT 0x0004
+#define SS 0x5353
+#define SL 0x4c53
+#define FL 0x4c46
+#define UN 0x4e55
+#define OF 0x464f
+#define DT 0x5444
+#define AT 0x5441
 
 #endif

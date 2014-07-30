@@ -21,6 +21,7 @@
 #include <fstream>
 
 #include "DataSet.h"
+#include "TransferSyntax.h"
 
 using namespace std;
 
@@ -42,6 +43,8 @@ namespace Dicomkit {
 			short ReadShort();
 			int ReadInt(int count);
 
+			DicomTag ReadDicomTag();
+			void PopulateFileMetaData(DataSet& dataSet, TransferSyntax& syntax);
 			DataElement* ParseDataElement();
 		public:
 			DicomReader(string fileName);

@@ -48,7 +48,8 @@ string TransferSyntax::GetTransferSyntaxUid()
 void TransferSyntax::SetTransferSyntaxUid(string uid)
 {
 	const char* transferUid = uid.c_str();
-	
+	transferSyntaxUid = transferUid;
+
 	if(strcmp(transferUid, Implicit_VR_Little_Endian) == 0) {
 		isImplicitVr = isLittleEndian = true;
 	} else if(strcmp(transferUid, Explicit_VR_Little_Endian) == 0) {

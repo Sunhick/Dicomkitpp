@@ -76,9 +76,9 @@ namespace Dicomkit {
 		class NotSupportedTransferSyntax : public exception 
 		{
 		public:
-			NotSupportedTransferSyntax(const char* message) : exception(message) {}
+			NotSupportedTransferSyntax(char* message) : exception(message) {}
 			NotSupportedTransferSyntax() : exception() {}
-			~NotSupportedTransferSyntax();
+			~NotSupportedTransferSyntax() {}
 		};
 	}
 }

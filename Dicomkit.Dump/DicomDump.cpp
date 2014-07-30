@@ -47,161 +47,213 @@ void DicomDump::DumpLog(list<DataElement*> dataElements, ostream& out)
 	for (list<DataElement*>::iterator dataElement1 = dataElements.begin();
 		dataElement1 != dataElements.end();
 		++dataElement1) {
-		string message;
+			string message;
 
-		DataElement* dataElement = *dataElement1;
+			DataElement* dataElement = *dataElement1;
 
-		short valueType = dataElement->GetValueType();
-		short groupId = dataElement->GetDicomTag().GroupId;
-		short elementId = dataElement->GetDicomTag().ElementId;
-		int valLen = dataElement->GetValueLength();
+			short valueType = dataElement->GetValueType();
+			short groupId = dataElement->GetDicomTag().GroupId;
+			short elementId = dataElement->GetDicomTag().ElementId;
+			int valLen = dataElement->GetValueLength();
 
-		//skip Item sequence.
-		if (groupId == 0xfffe && elementId == 0xe000) {
-			continue;
-		}
+			//skip Item sequence.
+			if (groupId == 0xfffe && elementId == 0xe000) {
+				continue;
+			}
 
-		switch (valueType) {
-		case UL:
-		{
-				   unsigned char* data = dataElement->GetValueField();
-				   unsigned long ulong = data[0] | data[1] << 8 | data[2] << 16 | data[3] << 24;
-				   message = GetLog(groupId, elementId, "UL");
-				   out << message << ulong << endl;
-		}
-			break;
-		case OB:
-		{
-				   message = GetLog(groupId, elementId, "OB");
-				   out << message << endl;
-		}
-			break;
-		case UI:
-		{
-				   message = GetLog(groupId, elementId, "UI");
-				   string uid((char*)dataElement->GetValueField(), valLen);
-				   out << message << uid.c_str() << endl;
-		}
-			break;
-		case SH:
-		{
-				   message = GetLog(groupId, elementId, "SH");
-				   string uid((char*)dataElement->GetValueField(), valLen);
-				   out << message << uid.c_str() << endl;
-		}
-			break;
-		case AE:
-		{
-				   message = GetLog(groupId, elementId, "AE");
-				   string uid((char*)dataElement->GetValueField(), valLen);
-				   out << message << uid.c_str() << endl;
-		}
-			break;
-		case CS:
-		{
-				   message = GetLog(groupId, elementId, "CS");
-				   string uid((char*)dataElement->GetValueField(), valLen);
-				   out << message << uid.c_str() << endl;
-		}
-			break;
-		case DA:
-		{
-				   message = GetLog(groupId, elementId, "DA");
-				   string uid((char*)dataElement->GetValueField(), valLen);
-				   out << message << uid.c_str() << endl;
-		}
-			break;
-		case TM:
-		{
-				   message = GetLog(groupId, elementId, "TM");
-				   string uid((char*)dataElement->GetValueField(), valLen);
-				   out << message << uid.c_str() << endl;
-		}
-			break;
-		case LO:
-		{
-				   message = GetLog(groupId, elementId, "LO");
-				   string uid((char*)dataElement->GetValueField(), valLen);
-				   out << message << uid.c_str() << endl;
-		}
-			break;
-		case PN:
-		{
-				   message = GetLog(groupId, elementId, "PN");
-				   string uid((char*)dataElement->GetValueField(), valLen);
-				   out << message << uid.c_str() << endl;
-		}
-			break;
-		case SQ:
-		{
-				   message = GetLog(groupId, elementId, "SQ");
-				   out << message << endl;
+			switch (valueType) {
+			case FL:
+				{
+					unsigned char* data = dataElement->GetValueField();
+					message = GetLog(groupId, elementId, "FL");
+					out << message;
 
-				   out << "-----------Start-----------" << endl;
-				   DumpLog(dataElement->GetDataElements(), out);
-				   out << "----------- End -----------" << endl;
-		}
-			break;
-		case AS:
-		{
-				   message = GetLog(groupId, elementId, "AS");
-				   string uid((char*)dataElement->GetValueField(), valLen);
-				   out << message << uid.c_str() << endl;
-		}
-			break;
-		case DS:
-		{
-				   message = GetLog(groupId, elementId, "DS");
-				   string uid((char*)dataElement->GetValueField(), valLen);
-				   out << message << uid.c_str() << endl;
-		}
-			break;
-		case IS:
-		{
-				   message = GetLog(groupId, elementId, "IS");
-				   string uid((char*)dataElement->GetValueField(), valLen);
-				   out << message << uid.c_str() << endl;
-		}
-			break;
-		case US:
-		{
-				   unsigned char* data = dataElement->GetValueField();
-				   short us = data[1] << 8 | data[0];
-				   message = GetLog(groupId, elementId, "US");
-				   out << message << us << endl;
-		}
-			break;
-		case LT:
-		{
-				   message = GetLog(groupId, elementId, "LT");
-				   string uid((char*)dataElement->GetValueField(), valLen);
-				   out << message << uid.c_str() << endl;
-		}
-			break;
-		case ST:
-		{
-				   message = GetLog(groupId, elementId, "ST");
-				   string uid((char*)dataElement->GetValueField(), valLen);
-				   out << message << uid.c_str() << endl;
-		}
-			break;
-		case OW:
-			message = GetLog(groupId, elementId, "OW");
-			out << message << endl;
-			break;
-		default:
-		{
-				   message = GetLog(groupId, elementId, "AT");
-				   unsigned char* data = dataElement->GetValueField();
+					for (int i = 0; i < dataElement->GetValueLength() / sizeof(float); i++) {
+						float f;
+						memcpy(&f, data + (i * 4), sizeof(float));
+						out << f << "";
+					}
+					out << endl;
 
-				   int at1 = data[1] << 8 | data[0];
-				   int at2 = data[3] << 8 | data[2];
+				}
+				break;
+			case SL:
+				{
+					unsigned char* data = dataElement->GetValueField();
+					message = GetLog(groupId, elementId, "SL");
+					out << message;
 
-				   char buf[20];
-				   sprintf_s(buf, sizeof(buf), "(%04x,%04x)", at1, at2);
-				   out << message << buf << endl;
-		}
-		}
+					for (int i = 0; i < dataElement->GetValueLength() / sizeof(long); i++) {
+						int j = i * 4;
+						long us = data[j] | data[j + 1] << 8 | data[j + 2] << 16 | data[j + 3] << 24;
+						out << us << " ";
+					}
+					out << endl;
+				}
+				break;
+			case SS:
+				{
+					unsigned char* data = dataElement->GetValueField();
+					message = GetLog(groupId, elementId, "SS");
+					out << message;
+
+					for (int i = 0; i < dataElement->GetValueLength() / sizeof(short); i++) {
+						short us = data[(i * 2) + 1] << 8 | data[i * 2];
+						out << us << " ";
+					}
+					out << endl;
+				}
+				break;
+			case UL:
+				{
+					unsigned char* data = dataElement->GetValueField();
+					unsigned long ulong = data[0] | data[1] << 8 | data[2] << 16 | data[3] << 24;
+					message = GetLog(groupId, elementId, "UL");
+					out << message << ulong << endl;
+				}
+				break;
+			case OB:
+				{
+					message = GetLog(groupId, elementId, "OB");
+					out << message << endl;
+				}
+				break;
+			case UI:
+				{
+					message = GetLog(groupId, elementId, "UI");
+					string uid((char*)dataElement->GetValueField(), valLen);
+					out << message << uid.c_str() << endl;
+				}
+				break;
+			case SH:
+				{
+					message = GetLog(groupId, elementId, "SH");
+					string uid((char*)dataElement->GetValueField(), valLen);
+					out << message << uid.c_str() << endl;
+				}
+				break;
+			case AE:
+				{
+					message = GetLog(groupId, elementId, "AE");
+					string uid((char*)dataElement->GetValueField(), valLen);
+					out << message << uid.c_str() << endl;
+				}
+				break;
+			case CS:
+				{
+					message = GetLog(groupId, elementId, "CS");
+					string uid((char*)dataElement->GetValueField(), valLen);
+					out << message << uid.c_str() << endl;
+				}
+				break;
+			case DA:
+				{
+					message = GetLog(groupId, elementId, "DA");
+					string uid((char*)dataElement->GetValueField(), valLen);
+					out << message << uid.c_str() << endl;
+				}
+				break;
+			case TM:
+				{
+					message = GetLog(groupId, elementId, "TM");
+					string uid((char*)dataElement->GetValueField(), valLen);
+					out << message << uid.c_str() << endl;
+				}
+				break;
+			case LO:
+				{
+					message = GetLog(groupId, elementId, "LO");
+					string uid((char*)dataElement->GetValueField(), valLen);
+					out << message << uid.c_str() << endl;
+				}
+				break;
+			case PN:
+				{
+					message = GetLog(groupId, elementId, "PN");
+					string uid((char*)dataElement->GetValueField(), valLen);
+					out << message << uid.c_str() << endl;
+				}
+				break;
+			case SQ:
+				{
+					message = GetLog(groupId, elementId, "SQ");
+					out << message << endl;
+
+					out << "-----------Start-----------" << endl;
+					DumpLog(dataElement->GetDataElements(), out);
+					out << "----------- End -----------" << endl;
+				}
+				break;
+			case AS:
+				{
+					message = GetLog(groupId, elementId, "AS");
+					string uid((char*)dataElement->GetValueField(), valLen);
+					out << message << uid.c_str() << endl;
+				}
+				break;
+			case DS:
+				{
+					message = GetLog(groupId, elementId, "DS");
+					string uid((char*)dataElement->GetValueField(), valLen);
+					out << message << uid.c_str() << endl;
+				}
+				break;
+			case IS:
+				{
+					message = GetLog(groupId, elementId, "IS");
+					string uid((char*)dataElement->GetValueField(), valLen);
+					out << message << uid.c_str() << endl;
+				}
+				break;
+			case US:
+				{
+					unsigned char* data = dataElement->GetValueField();
+					message = GetLog(groupId, elementId, "US");
+					out << message;
+
+					for (int i = 0; i < dataElement->GetValueLength()/ sizeof(unsigned short); i++) {
+						unsigned short us = data[(i * 2) + 1] << 8 | data[i * 2];
+						out << us << " ";
+					}
+					out << endl;
+
+				}
+				break;
+			case LT:
+				{
+					message = GetLog(groupId, elementId, "LT");
+					string uid((char*)dataElement->GetValueField(), valLen);
+					out << message << uid.c_str() << endl;
+				}
+				break;
+			case ST:
+				{
+					message = GetLog(groupId, elementId, "ST");
+					string uid((char*)dataElement->GetValueField(), valLen);
+					out << message << uid.c_str() << endl;
+				}
+				break;
+			case OW:
+				message = GetLog(groupId, elementId, "OW");
+				out << message << endl;
+				break;
+			case AT:
+				{
+					message = GetLog(groupId, elementId, "AT");
+					unsigned char* data = dataElement->GetValueField();
+
+					int at1 = data[1] << 8 | data[0];
+					int at2 = data[3] << 8 | data[2];
+
+					char buf[20];
+					sprintf_s(buf, sizeof(buf), "(%04x,%04x)", at1, at2);
+					out << message << buf << endl;
+				}
+			default:
+				message = GetLog(groupId, elementId, "--");
+				out << message << endl;
+				break;
+			}
 	}
 }
 
