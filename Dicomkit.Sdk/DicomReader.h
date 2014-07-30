@@ -32,6 +32,7 @@ namespace Dicomkit {
 		{
 		private:
 			string fileName;
+			size_t fileLength;
 			ifstream* reader;
 
 			bool IsValidDicomFile();

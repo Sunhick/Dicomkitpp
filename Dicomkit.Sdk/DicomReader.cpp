@@ -29,7 +29,10 @@ DicomReader::DicomReader(string fileName)
 		throw exception(message);
 	}
 
-	this->reader = new ifstream(fileName, ios::in | ios::binary);
+	this->reader = new ifstream(fileName, ios::ate | ios::binary);
+	
+	this->fileLength = reader->tellg();
+	reader->seekg(0,ios::beg); //reset head to begining
 
 	if(!reader)	
 		throw exception("Error occured in opening the file");
@@ -75,7 +78,10 @@ DataSet DicomReader::ParseDicom()
 
 	if(!syntax.IsImplicitVr() && syntax.IsLittleEndian() ) {
 		//read Data elements in Dataset
-		while(!reader->eof()) {
+
+		//FIXME: What's wrong with reader->eof() ? 
+		//		 It reads an extra tag after last tag is read. Is it pixel padding ?
+		while(reader->tellg() < this->fileLength /*!reader->eof()*/) {	
 			DataElement* dataElement = ParseDataElement();
 			dataSet.AddDataElement(dataElement);
 		}

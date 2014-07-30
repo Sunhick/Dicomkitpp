@@ -115,7 +115,13 @@ void DicomDump::DumpLog(list<DataElement*> dataElements, ostream& out)
 			case OB:
 				{
 					message = GetLog(groupId, elementId, "OB");
-					out << message << endl;
+					out << message;
+
+					unsigned char* data = dataElement->GetValueField();
+					for (int i = 0; i  < dataElement->GetValueLength(); i++) {
+						out << hex << (unsigned short)*(data+i) << " ";
+					}
+					out<<endl;
 				}
 				break;
 			case UI:
@@ -234,8 +240,14 @@ void DicomDump::DumpLog(list<DataElement*> dataElements, ostream& out)
 				}
 				break;
 			case OW:
-				message = GetLog(groupId, elementId, "OW");
-				out << message << endl;
+				{
+					message = GetLog(groupId, elementId, "OW");
+					out << message << endl;
+					/*unsigned char* data = dataElement->GetValueField();
+					  for (int i = 0; i  < dataElement->GetValueLength(); i++) {
+						out << hex << (unsigned short)*(data+i) << " ";
+					}*/
+				}
 				break;
 			case AT:
 				{
