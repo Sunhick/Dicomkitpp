@@ -13,8 +13,11 @@
 // You should have received a copy of the GNU General Public License
 // along with DicomKit.  If not, see <http://www.gnu.org/licenses/>.
 
+#include <vector>
+
 #include "DicomDump.h"
 #include "..\Dicomkit.Sdk\DataSet.h"
+#include "..\Dicomkit.Sdk\DataParser.h"
 #include "..\Dicomkit.Sdk\ValueRepresentation.h"
 
 using namespace std;
@@ -57,192 +60,154 @@ void DicomDump::DumpLog(list<DataElement*> dataElements, ostream& out)
 			int valLen = dataElement->GetValueLength();
 
 			//skip Item sequence.
-			if (groupId == 0xfffe && elementId == 0xe000) {
-				continue;
-			}
+			if (groupId == 0xfffe && elementId == 0xe000) continue;
 
 			switch (valueType) {
 			case FL:
 				{
-					unsigned char* data = dataElement->GetValueField();
-					message = GetLog(groupId, elementId, "FL");
-					out << message;
+					out << GetLog(groupId, elementId, "FL");
+					vector<float> fl = DataParser::ParseFL(dataElement->GetValueField(), dataElement->GetValueLength());
 
-					for (int i = 0; i < dataElement->GetValueLength() / sizeof(float); i++) {
-						float f;
-						memcpy(&f, data + (i * 4), sizeof(float));
-						out << f << "";
-					}
-					out << endl;
-
+					for (int i = 0; i < fl.size(); i++) 
+						out << fl[i] << " ";
 				}
 				break;
 			case SL:
 				{
-					unsigned char* data = dataElement->GetValueField();
-					message = GetLog(groupId, elementId, "SL");
-					out << message;
+					out << GetLog(groupId, elementId, "SL");
+					vector<long> us = DataParser::ParseSL(dataElement->GetValueField(), dataElement->GetValueLength());
 
-					for (int i = 0; i < dataElement->GetValueLength() / sizeof(long); i++) {
-						int j = i * 4;
-						long us = data[j] | data[j + 1] << 8 | data[j + 2] << 16 | data[j + 3] << 24;
-						out << us << " ";
-					}
-					out << endl;
+					for (int i = 0; i < us.size(); i++)
+						out << us[i] << " ";
 				}
 				break;
 			case SS:
 				{
-					unsigned char* data = dataElement->GetValueField();
-					message = GetLog(groupId, elementId, "SS");
-					out << message;
+					out << GetLog(groupId, elementId, "SS");
+					vector<short> ss = DataParser::ParseSS(dataElement->GetValueField(), dataElement->GetValueLength());
 
-					for (int i = 0; i < dataElement->GetValueLength() / sizeof(short); i++) {
-						short us = data[(i * 2) + 1] << 8 | data[i * 2];
-						out << us << " ";
-					}
-					out << endl;
+					for(vector<short>::iterator it = ss.begin(); it != ss.end(); ++it)
+						out << *it << " ";
 				}
 				break;
 			case UL:
 				{
-					unsigned char* data = dataElement->GetValueField();
-					unsigned long ulong = data[0] | data[1] << 8 | data[2] << 16 | data[3] << 24;
-					message = GetLog(groupId, elementId, "UL");
-					out << message << ulong << endl;
+					out << GetLog(groupId, elementId, "UL");
+					vector<unsigned long> ul = DataParser::ParseUL(dataElement->GetValueField(), dataElement->GetValueLength());
+
+					for(vector<unsigned long>::iterator it = ul.begin(); it != ul.end(); ++it)
+						out << *it << " ";
 				}
 				break;
 			case OB:
 				{
-					message = GetLog(groupId, elementId, "OB");
-					out << message;
+					out << GetLog(groupId, elementId, "OB");
+					vector<unsigned char> ob = DataParser::ParseOB(dataElement->GetValueField(), dataElement->GetValueLength());
 
-					unsigned char* data = dataElement->GetValueField();
-					for (int i = 0; i  < dataElement->GetValueLength(); i++) {
-						out << hex << (unsigned short)*(data+i) << " ";
-					}
-					out<<endl;
+					for (int i = 0; i < ob.size(); i++)
+						out << (unsigned short)ob[i] << " ";
 				}
 				break;
 			case UI:
 				{
-					message = GetLog(groupId, elementId, "UI");
-					string uid((char*)dataElement->GetValueField(), valLen);
-					out << message << uid.c_str() << endl;
+					out << GetLog(groupId, elementId, "UI") 
+						<< DataParser::ParseUI(dataElement->GetValueField(), valLen).c_str();
 				}
 				break;
 			case SH:
 				{
-					message = GetLog(groupId, elementId, "SH");
-					string uid((char*)dataElement->GetValueField(), valLen);
-					out << message << uid.c_str() << endl;
+					out << GetLog(groupId, elementId, "SH") 
+						<< DataParser::ParseSH(dataElement->GetValueField(), valLen).c_str() ;
 				}
 				break;
 			case AE:
 				{
-					message = GetLog(groupId, elementId, "AE");
-					string uid((char*)dataElement->GetValueField(), valLen);
-					out << message << uid.c_str() << endl;
+					out << GetLog(groupId, elementId, "AE")
+						<< DataParser::ParseAE(dataElement->GetValueField(), valLen).c_str();
 				}
 				break;
 			case CS:
 				{
-					message = GetLog(groupId, elementId, "CS");
-					string uid((char*)dataElement->GetValueField(), valLen);
-					out << message << uid.c_str() << endl;
+					out << GetLog(groupId, elementId, "CS")
+						<< DataParser::ParseCS(dataElement->GetValueField(), valLen).c_str();
 				}
 				break;
 			case DA:
 				{
-					message = GetLog(groupId, elementId, "DA");
-					string uid((char*)dataElement->GetValueField(), valLen);
-					out << message << uid.c_str() << endl;
+					out << GetLog(groupId, elementId, "DA")
+						<< DataParser::ParseDA(dataElement->GetValueField(), valLen).c_str();
 				}
 				break;
 			case TM:
 				{
-					message = GetLog(groupId, elementId, "TM");
-					string uid((char*)dataElement->GetValueField(), valLen);
-					out << message << uid.c_str() << endl;
+					out << GetLog(groupId, elementId, "TM")
+					    << DataParser::ParseTM(dataElement->GetValueField(), valLen).c_str();
 				}
 				break;
 			case LO:
 				{
-					message = GetLog(groupId, elementId, "LO");
-					string uid((char*)dataElement->GetValueField(), valLen);
-					out << message << uid.c_str() << endl;
+					out << GetLog(groupId, elementId, "LO")
+						<<DataParser::ParseLO(dataElement->GetValueField(), valLen).c_str();
 				}
 				break;
 			case PN:
 				{
-					message = GetLog(groupId, elementId, "PN");
-					string uid((char*)dataElement->GetValueField(), valLen);
-					out << message << uid.c_str() << endl;
+					out << GetLog(groupId, elementId, "PN")
+						<< DataParser::ParsePN(dataElement->GetValueField(), valLen).c_str();
 				}
 				break;
 			case SQ:
 				{
-					message = GetLog(groupId, elementId, "SQ");
-					out << message << endl;
-
-					out << "-----------Start-----------" << endl;
+					out << GetLog(groupId, elementId, "SQ");
+					out << "[-----------SEQ START-----------" << endl;
 					DumpLog(dataElement->GetDataElements(), out);
-					out << "----------- End -----------" << endl;
+					out << "-----------SEQ END-------------]";
 				}
 				break;
 			case AS:
 				{
-					message = GetLog(groupId, elementId, "AS");
-					string uid((char*)dataElement->GetValueField(), valLen);
-					out << message << uid.c_str() << endl;
+					out << GetLog(groupId, elementId, "AS") 
+						<<DataParser::ParseAS(dataElement->GetValueField(), valLen).c_str();
 				}
 				break;
 			case DS:
 				{
-					message = GetLog(groupId, elementId, "DS");
-					string uid((char*)dataElement->GetValueField(), valLen);
-					out << message << uid.c_str() << endl;
+					out << GetLog(groupId, elementId, "DS")
+						<< DataParser::ParseDS(dataElement->GetValueField(), valLen).c_str();
 				}
 				break;
 			case IS:
 				{
-					message = GetLog(groupId, elementId, "IS");
-					string uid((char*)dataElement->GetValueField(), valLen);
-					out << message << uid.c_str() << endl;
+					out << GetLog(groupId, elementId, "IS")
+						<< DataParser::ParseIS(dataElement->GetValueField(), valLen).c_str();
 				}
 				break;
 			case US:
 				{
-					unsigned char* data = dataElement->GetValueField();
-					message = GetLog(groupId, elementId, "US");
-					out << message;
-
-					for (int i = 0; i < dataElement->GetValueLength()/ sizeof(unsigned short); i++) {
-						unsigned short us = data[(i * 2) + 1] << 8 | data[i * 2];
-						out << us << " ";
-					}
-					out << endl;
-
+					out << GetLog(groupId, elementId, "US");
+					vector<unsigned short> us = DataParser::ParseUS(dataElement->GetValueField(), dataElement->GetValueLength());
+					
+					for (vector<unsigned short>::iterator it = us.begin(); it != us.end(); ++it)
+						out << *it << " ";
 				}
 				break;
 			case LT:
 				{
-					message = GetLog(groupId, elementId, "LT");
-					string uid((char*)dataElement->GetValueField(), valLen);
-					out << message << uid.c_str() << endl;
+					out << GetLog(groupId, elementId, "LT")
+						<< DataParser::ParseLT(dataElement->GetValueField(), valLen).c_str();
 				}
 				break;
 			case ST:
 				{
-					message = GetLog(groupId, elementId, "ST");
-					string uid((char*)dataElement->GetValueField(), valLen);
-					out << message << uid.c_str() << endl;
+					out << GetLog(groupId, elementId, "ST")
+						<< DataParser::ParseST(dataElement->GetValueField(), valLen).c_str();
 				}
 				break;
 			case OW:
 				{
-					message = GetLog(groupId, elementId, "OW");
-					out << message << endl;
+					out << GetLog(groupId, elementId, "OW");	//mostly pixel data.
+
+					// uncommented below code for printing out hex re-presentation of pixel data
 					/*unsigned char* data = dataElement->GetValueField();
 					  for (int i = 0; i  < dataElement->GetValueLength(); i++) {
 						out << hex << (unsigned short)*(data+i) << " ";
@@ -251,21 +216,19 @@ void DicomDump::DumpLog(list<DataElement*> dataElements, ostream& out)
 				break;
 			case AT:
 				{
-					message = GetLog(groupId, elementId, "AT");
-					unsigned char* data = dataElement->GetValueField();
-
-					int at1 = data[1] << 8 | data[0];
-					int at2 = data[3] << 8 | data[2];
+					out << GetLog(groupId, elementId, "AT");
+					DicomTag tag = DataParser::ParseAT(dataElement->GetValueField(), dataElement->GetValueLength());
 
 					char buf[20];
-					sprintf_s(buf, sizeof(buf), "(%04x,%04x)", at1, at2);
-					out << message << buf << endl;
+					sprintf_s(buf, sizeof(buf), "(%04x,%04x)", tag.GroupId, tag.ElementId);
+					out << message << buf;
 				}
 			default:
-				message = GetLog(groupId, elementId, "--");
-				out << message << endl;
+				out << GetLog(groupId, elementId, "--");
 				break;
 			}
+
+			out << endl;
 	}
 }
 

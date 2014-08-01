@@ -65,6 +65,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="DataElement.h" />
+    <ClInclude Include="DataParser.h" />
     <ClInclude Include="DataSet.h" />
     <ClInclude Include="DicomReader.h" />
     <ClInclude Include="DicomTag.h" />
@@ -75,6 +76,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DataElement.cpp" />
+    <ClCompile Include="DataParser.cpp" />
     <ClCompile Include="DataSet.cpp" />
     <ClCompile Include="DicomReader.cpp" />
     <ClCompile Include="DicomWriter.cpp" />
