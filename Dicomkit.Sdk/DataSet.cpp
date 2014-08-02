@@ -68,3 +68,8 @@ char* DataSet::GetPrefix()
 {
 	return this->prefix;
 }
+
+bool DataSet::IsEmpty()
+{
+	return (this->dataElement.size() > 0);
+}

@@ -41,6 +41,7 @@ namespace Dicomkit {
 			char* GetPreamble();
 			char* GetPrefix();
 
+			bool IsEmpty();
 			void AddDataElement(DataElement dataElement);
 			void AddDataElement(DataElement* dataElement);
 			void RemoveDataElement(DataElement* dataElement);

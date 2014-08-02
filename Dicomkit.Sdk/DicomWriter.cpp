@@ -22,7 +22,6 @@ DicomWriter::DicomWriter(void)
 	Init();
 }
 
-
 DicomWriter::~DicomWriter(void)
 {
 	delete dataSet;
@@ -35,16 +34,19 @@ void DicomWriter::Init()
 
 void DicomWriter::AddDataElement(DataElement dataElement)
 {
-
+	this->dataSet->AddDataElement(dataElement);
 }
 
 void DicomWriter::Save(string fileName)
 {
+	SortElements();
 	Save(this->dataSet,fileName);
 }
 
 void DicomWriter::Save(DataSet* dataSet, string fileName)
 {
+	CheckDicomMandatoryTags();
+
 	ofstream dicomStream(fileName, ios::binary | ios::out);
 
 	WriteHeader(dicomStream, dataSet);
@@ -63,4 +65,20 @@ void DicomWriter::WriteHeader(ofstream& dicomStream, DataSet* dataSet)
 void DicomWriter::WriteDataElements(ofstream& dicomStream, DataSet* dataSet)
 {
 	//get bytes from data element and dump to file
+}
+
+void DicomWriter::SortElements()
+{
+	//sort the elements based on dicom tags. suggested in dicom part 05 
+}
+
+void DicomWriter::PadNullBytes(int count)
+{
+	//pad with null(0x00) bytes
+}
+
+void DicomWriter::CheckDicomMandatoryTags()
+{
+	//check for dicom mandatory tags. Like Transfer syntax etc.
+	throw MissingMandatoryTagException("Implement this method");
 }

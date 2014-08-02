@@ -33,9 +33,8 @@ namespace Dicomkit {
 			static vector<unsigned long> ParseUL(unsigned char* data, int length);	//unsigned long VR
 			static vector<unsigned char> ParseOB(unsigned char* data, int length);	//other byte VR
 			static vector<unsigned short> ParseUS(unsigned char* data, int length);	//unsigned short VR
-			
+
 			static string ParseUI(unsigned char* data, int length);					//unique identifier VR
-			static string ParseString(unsigned char* data, int length);				//string parser
 			static string ParseSH(unsigned char* data, int length);					//shrot string VR
 			static string ParseAE(unsigned char* data, int length);					//Application entity VR
 			static string ParseCS(unsigned char* data, int length);					//Code string VR
@@ -44,10 +43,11 @@ namespace Dicomkit {
 			static string ParseDS(unsigned char* data, int length);					//Decimal string VR
 			static string ParseLT(unsigned char* data, int length);					//long text VR
 			static string ParseST(unsigned char* data, int length);					//short text VR
-		    static string ParseAS(unsigned char* data, int length);					//Age string VR
+			static string ParseAS(unsigned char* data, int length);					//Age string VR
 			static string ParseDA(unsigned char* data, int length);					//Date VR
 			static string ParseTM(unsigned char* data, int lenth);					//Time VR
 			static string ParseIS(unsigned char* data, int lenth);					//Integer string VR
+			static string ParseString(unsigned char* data, int length);				//string parser
 
 			static DicomTag ParseAT(unsigned char* data, int lenth);				//Attribute tag VR
 		};

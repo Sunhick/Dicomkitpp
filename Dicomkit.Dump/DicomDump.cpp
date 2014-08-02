@@ -141,7 +141,7 @@ void DicomDump::DumpLog(list<DataElement*> dataElements, ostream& out)
 			case TM:
 				{
 					out << GetLog(groupId, elementId, "TM")
-					    << DataParser::ParseTM(dataElement->GetValueField(), valLen).c_str();
+						<< DataParser::ParseTM(dataElement->GetValueField(), valLen).c_str();
 				}
 				break;
 			case LO:
@@ -186,7 +186,7 @@ void DicomDump::DumpLog(list<DataElement*> dataElements, ostream& out)
 				{
 					out << GetLog(groupId, elementId, "US");
 					vector<unsigned short> us = DataParser::ParseUS(dataElement->GetValueField(), dataElement->GetValueLength());
-					
+
 					for (vector<unsigned short>::iterator it = us.begin(); it != us.end(); ++it)
 						out << *it << " ";
 				}
@@ -209,8 +209,8 @@ void DicomDump::DumpLog(list<DataElement*> dataElements, ostream& out)
 
 					// uncommented below code for printing out hex re-presentation of pixel data
 					/*unsigned char* data = dataElement->GetValueField();
-					  for (int i = 0; i  < dataElement->GetValueLength(); i++) {
-						out << hex << (unsigned short)*(data+i) << " ";
+					for (int i = 0; i  < dataElement->GetValueLength(); i++) {
+					out << hex << (unsigned short)*(data+i) << " ";
 					}*/
 				}
 				break;

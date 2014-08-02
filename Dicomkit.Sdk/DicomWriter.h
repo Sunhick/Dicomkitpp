@@ -17,8 +17,9 @@
 #define DICOM_WRITER_H
 
 #include <string>
-#include <iostream>
 #include <fstream>
+#include <iostream>
+#include <exception>
 
 #include "DataSet.h"
 
@@ -34,6 +35,9 @@ namespace Dicomkit {
 
 			void WriteHeader(ofstream& dicomStream, DataSet* dataSet);
 			void WriteDataElements(ofstream& dicomStream, DataSet* dataSet);
+			void SortElements();
+			void PadNullBytes(int count);
+			void CheckDicomMandatoryTags();
 		public:
 			DicomWriter(void);
 			~DicomWriter(void);
@@ -41,6 +45,14 @@ namespace Dicomkit {
 			void AddDataElement(DataElement dataElement);
 			void Save(string fileName);
 			void Save(DataSet* dataSet, string fileName);
+		};
+
+		class MissingMandatoryTagException : public exception 
+		{
+		public:
+			MissingMandatoryTagException(char* message) : exception(message) {}
+			MissingMandatoryTagException() : exception() {}
+			~MissingMandatoryTagException() {}
 		};
 	}
 }
