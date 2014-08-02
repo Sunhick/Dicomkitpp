@@ -40,7 +40,7 @@ void DicomDump::Dump(ostream& out)
 	//this->dicomReader->Dump();
 
 	DataSet dataSet = this->dicomReader->ParseDicom();
-	list<DataElement*> dataElements = dataSet.GetDataElement();
+	list<DataElement*> dataElements = dataSet.GetDataElements();
 
 	DumpLog(dataElements, out);
 }

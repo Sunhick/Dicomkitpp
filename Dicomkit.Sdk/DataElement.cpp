@@ -36,6 +36,12 @@ DataElement::DataElement(const DataElement& dataElement)
 
 DataElement::~DataElement(void)
 {
+	//delete valueField;
+
+	////delete list of data elements
+	//for(list<DataElement*>::iterator it = dataElements.begin(); 
+	//	it != dataElements.end(); 
+	//	++it) delete *it;
 }
 
 void DataElement::SetDicomTag(DicomTag tag)

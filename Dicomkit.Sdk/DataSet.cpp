@@ -24,9 +24,12 @@ DataSet::DataSet(void)
 {
 }
 
-
 DataSet::~DataSet(void)
 {
+	////delete list of data elements
+	//for(list<DataElement*>::iterator it = dataElements.begin(); 
+	//	it != dataElements.end(); 
+	//	++it) delete *it;
 }
 
 void DataSet::SetPreamble(char* preamble)
@@ -41,22 +44,22 @@ void DataSet::SetPrefix(char* prefix)
 
 void DataSet::AddDataElement(DataElement dataElement)
 {
-	this->dataElement.push_back(new DataElement(dataElement));
+	this->dataElements.push_back(new DataElement(dataElement));
 }
 
 void DataSet::AddDataElement(DataElement* dataElement)
 {
-	this->dataElement.push_back(dataElement);
+	this->dataElements.push_back(dataElement);
 }
 
 void DataSet::RemoveDataElement(DataElement* dataElement)
 {
-	this->dataElement.remove(dataElement);	
+	this->dataElements.remove(dataElement);	
 }
 
-list<DataElement*> DataSet::GetDataElement()
+list<DataElement*> DataSet::GetDataElements()
 {
-	return this->dataElement;
+	return this->dataElements;
 }
 
 char* DataSet::GetPreamble()
@@ -71,5 +74,5 @@ char* DataSet::GetPrefix()
 
 bool DataSet::IsEmpty()
 {
-	return (this->dataElement.size() > 0);
+	return (this->dataElements.size() > 0);
 }
