@@ -19,7 +19,7 @@
 #include <string>
 #include <list>
 
-#include "..\Dicomkit.Sdk\DicomReader.h"
+#include "../Dicomkit.Sdk/DicomReader.h"
 
 using namespace std;
 using namespace Dicomkit::Sdk;

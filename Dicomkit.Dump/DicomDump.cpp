@@ -16,9 +16,9 @@
 #include <vector>
 
 #include "DicomDump.h"
-#include "..\Dicomkit.Sdk\DataSet.h"
-#include "..\Dicomkit.Sdk\DataParser.h"
-#include "..\Dicomkit.Sdk\ValueRepresentation.h"
+#include "../Dicomkit.Sdk/DataSet.h"
+#include "../Dicomkit.Sdk/DataParser.h"
+#include "../Dicomkit.Sdk/ValueRepresentation.h"
 
 using namespace std;
 using namespace Dicomkit::Dump;
@@ -66,46 +66,41 @@ void DicomDump::DumpLog(list<DataElement*> dataElements, ostream& out)
 			case FL:
 				{
 					out << GetLog(groupId, elementId, "FL");
-					vector<float> fl = DataParser::ParseFL(dataElement->GetValueField(), dataElement->GetValueLength());
-
-					for (int i = 0; i < fl.size(); i++) 
-						out << fl[i] << " ";
+					
+					for(auto fl : DataParser::ParseFL(dataElement->GetValueField(), dataElement->GetValueLength())) 
+						out << fl << " ";
 				}
 				break;
 			case SL:
 				{
 					out << GetLog(groupId, elementId, "SL");
-					vector<long> us = DataParser::ParseSL(dataElement->GetValueField(), dataElement->GetValueLength());
-
-					for (int i = 0; i < us.size(); i++)
-						out << us[i] << " ";
+					
+					for(auto us : DataParser::ParseSL(dataElement->GetValueField(), dataElement->GetValueLength()))
+						out << us << " ";
 				}
 				break;
 			case SS:
 				{
 					out << GetLog(groupId, elementId, "SS");
-					vector<short> ss = DataParser::ParseSS(dataElement->GetValueField(), dataElement->GetValueLength());
 
-					for(vector<short>::iterator it = ss.begin(); it != ss.end(); ++it)
-						out << *it << " ";
+					for(auto ss : DataParser::ParseSS(dataElement->GetValueField(), dataElement->GetValueLength()))
+						out << ss << " ";
 				}
 				break;
 			case UL:
 				{
 					out << GetLog(groupId, elementId, "UL");
-					vector<unsigned long> ul = DataParser::ParseUL(dataElement->GetValueField(), dataElement->GetValueLength());
 
-					for(vector<unsigned long>::iterator it = ul.begin(); it != ul.end(); ++it)
-						out << *it << " ";
+					for(auto ul : DataParser::ParseUL(dataElement->GetValueField(), dataElement->GetValueLength()))
+						out << ul << " ";
 				}
 				break;
 			case OB:
 				{
 					out << GetLog(groupId, elementId, "OB");
-					vector<unsigned char> ob = DataParser::ParseOB(dataElement->GetValueField(), dataElement->GetValueLength());
-
-					for (int i = 0; i < ob.size(); i++)
-						out << (unsigned short)ob[i] << " ";
+					
+					for(auto ob : DataParser::ParseOB(dataElement->GetValueField(), dataElement->GetValueLength()))
+						out << (unsigned short)ob << " ";
 				}
 				break;
 			case UI:
@@ -185,10 +180,9 @@ void DicomDump::DumpLog(list<DataElement*> dataElements, ostream& out)
 			case US:
 				{
 					out << GetLog(groupId, elementId, "US");
-					vector<unsigned short> us = DataParser::ParseUS(dataElement->GetValueField(), dataElement->GetValueLength());
-
-					for (vector<unsigned short>::iterator it = us.begin(); it != us.end(); ++it)
-						out << *it << " ";
+					
+					for(auto us : DataParser::ParseUS(dataElement->GetValueField(), dataElement->GetValueLength()))
+						out << us << " ";
 				}
 				break;
 			case LT:

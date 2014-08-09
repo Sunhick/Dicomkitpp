@@ -16,7 +16,7 @@
 #include <exception>
 
 #include "DicomDump.h"
-#include "..\Dicomkit.Sdk\DicomWriter.h"
+#include "../Dicomkit.Sdk/DicomWriter.h"
 
 using namespace std;
 using namespace Dicomkit::Dump;
