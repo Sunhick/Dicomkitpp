@@ -23,14 +23,14 @@ DicomReader::DicomReader(string fileName)
 {
 	this->fileName = fileName;
 
-	if(!FileExists(fileName)) {
+	this->reader = new ifstream(fileName, ios::ate | ios::binary);
+
+	if(!this->reader) {    //does file exists?
 		char message[20];
 		sprintf_s(message,sizeof(message), "File: %s not found!",fileName.c_str());
 		throw exception(message);
 	}
 
-	this->reader = new ifstream(fileName, ios::ate | ios::binary);
-	
 	this->fileLength = reader->tellg();
 	reader->seekg(0,ios::beg); //reset head to begining
 
@@ -40,7 +40,8 @@ DicomReader::DicomReader(string fileName)
 
 bool DicomReader::FileExists(const std::string& name)
 {
-	return true;
+	ifstream fileStream(name);
+	return fileStream;
 }
 
 DicomReader::~DicomReader(void)
