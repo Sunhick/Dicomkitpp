@@ -20,6 +20,7 @@ namespace Dicomkit {
 	namespace Sdk {
 		struct DicomTag
 		{
+		public:
 			DicomTag(){}
 
 			DicomTag(unsigned short groupId, unsigned short elementId) {
@@ -30,7 +31,7 @@ namespace Dicomkit {
 			unsigned short GroupId;
 			unsigned short ElementId;
 
-			bool operator==(DicomTag tag) {
+			bool operator==(const DicomTag& tag) const {
 				return (tag.GroupId == this->GroupId && tag.ElementId == this->ElementId);
 			}
 		};

@@ -71,7 +71,7 @@ DataSet DicomReader::ParseDicom()
 
 	//check next 4bytes for "DICM"
 	if(!IsValidDicomFile()) 
-		throw new InvalidDicomFileException("Not a valid DICOM file");
+		throw InvalidDicomFileException("Not a valid DICOM file");
 
 	dataSet.SetPrefix("DICM");
 
@@ -83,7 +83,7 @@ DataSet DicomReader::ParseDicom()
 		//FIXME: What's wrong with reader->eof() ? 
 		//		 It reads an extra tag after last tag is read. Is it pixel padding ?
 		while(reader->tellg() < this->fileLength /*!reader->eof()*/) {	
-			DataElement* dataElement = ParseDataElement();
+			DataElement dataElement = ParseDataElement();
 			dataSet.AddDataElement(dataElement);
 		}
 	} else {
@@ -121,9 +121,9 @@ void DicomReader::ReadFileMetaData(DataSet& dataSet, TransferSyntax& syntax)
 			syntax.SetTransferSyntaxUid(string((char*)data, valLen));
 		}
 
-		DataElement* dataElement = new DataElement;
-		dataElement->SetDicomTag(tag);
-		dataElement->SetData(valueType, valLen, data);
+		DataElement dataElement;
+		dataElement.SetDicomTag(tag);
+		dataElement.SetData(valueType, valLen, data);
 
 		dataSet.AddDataElement(dataElement);
 		delete[] data;
@@ -154,7 +154,7 @@ int DicomReader::ReadValueLength(short valueType)
 	return ReadInt(vlSize);
 }
 
-DataElement* DicomReader::ParseDataElement()
+DataElement DicomReader::ParseDataElement()
 {
 	//read dicom tag
 	DicomTag tag = ReadDicomTag();
@@ -165,16 +165,16 @@ DataElement* DicomReader::ParseDataElement()
 	//value length
 	int valLen = ReadValueLength(valueType);
 
-	DataElement* dataElement = new DataElement;
-	dataElement->SetDicomTag(tag);
+	DataElement dataElement;
+	dataElement.SetDicomTag(tag);
 
 	//For item sequences
 	if (valueType == SQ) {
 		int limit = valLen + reader->tellg();
 
 		while (reader->tellg() < limit) {
-			DataElement* de = ParseDataElement();
-			dataElement->AddDataElement(de);
+			DataElement de = ParseDataElement();
+			dataElement.AddDataElement(de);
 		}
 		valLen = 0; //read no data for SQ
 	}
@@ -182,7 +182,7 @@ DataElement* DicomReader::ParseDataElement()
 	//value
 	unsigned char* data = ReadBytes(valLen > 0 ? valLen : 0);
 
-	dataElement->SetData(valueType, valLen, data);
+	dataElement.SetData(valueType, valLen, data);
 
 	delete[] data;
 	return dataElement;

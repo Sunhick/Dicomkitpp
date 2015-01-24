@@ -29,12 +29,12 @@ namespace Dicomkit {
 		private:
 			char preamble[128];					//128 bit preamble
 			char prefix[4];						//4 bit dicom prefix "DICM"
-			list<DataElement*> dataElements;		//Data elements			
+			list<DataElement> dataElements;		//Data elements			
 		public:
 			DataSet(void);
 			~DataSet(void);
 
-			list<DataElement*> GetDataElements();
+			list<DataElement> GetDataElements();
 
 			void SetPreamble(char* preamble);
 			void SetPrefix(char* prefix);
@@ -43,7 +43,6 @@ namespace Dicomkit {
 
 			bool IsEmpty();
 			void AddDataElement(DataElement dataElement);
-			void AddDataElement(DataElement* dataElement);
 			void RemoveDataElement(DataElement* dataElement);
 		};
 

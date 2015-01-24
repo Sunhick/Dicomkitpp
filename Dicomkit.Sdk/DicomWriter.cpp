@@ -24,17 +24,38 @@ DicomWriter::DicomWriter(void)
 
 DicomWriter::~DicomWriter(void)
 {
-	delete dataSet;
 }
 
 void DicomWriter::Init()
 {
-	dataSet = new DataSet();
+	dataSet = DataSet();
+	
+	//patient mandatory tags
+	this->mandatoryTags.push_back(DicomTag(0x0008,0x0005));
+	this->mandatoryTags.push_back(DicomTag(0x0010,0x0010));
+	this->mandatoryTags.push_back(DicomTag(0x0010,0x0020));
+
+	//study mandatory tags
+	this->mandatoryTags.push_back(DicomTag(0x0008,0x0005));
+	this->mandatoryTags.push_back(DicomTag(0x0008,0x0020));
+	this->mandatoryTags.push_back(DicomTag(0x0008,0x0030));	
+	this->mandatoryTags.push_back(DicomTag(0x0008,0x0050));
+	this->mandatoryTags.push_back(DicomTag(0x0020,0x000D));
+	this->mandatoryTags.push_back(DicomTag(0x0020,0x0010));
+
+	//series mandatory tags
+	this->mandatoryTags.push_back(DicomTag(0x0008,0x0060));
+	this->mandatoryTags.push_back(DicomTag(0x0020,0x000E));
+	this->mandatoryTags.push_back(DicomTag(0x0020,0x0011));
+
+	//instance mandatory tags
+	this->mandatoryTags.push_back(DicomTag(0x0008,0x0018));
+	this->mandatoryTags.push_back(DicomTag(0x0020,0x0013));
 }
 
 void DicomWriter::AddDataElement(DataElement dataElement)
 {
-	this->dataSet->AddDataElement(dataElement);
+	this->dataSet.AddDataElement(dataElement);
 }
 
 void DicomWriter::Save(string fileName)
@@ -43,9 +64,9 @@ void DicomWriter::Save(string fileName)
 	Save(this->dataSet,fileName);
 }
 
-void DicomWriter::Save(DataSet* dataSet, string fileName)
+void DicomWriter::Save(DataSet dataSet, string fileName)
 {
-	CheckDicomMandatoryTags();
+	CheckDicomMandatoryTags(dataSet.GetDataElements());
 
 	ofstream dicomStream(fileName, ios::binary | ios::out);
 
@@ -56,15 +77,18 @@ void DicomWriter::Save(DataSet* dataSet, string fileName)
 	dicomStream.close();
 }
 
-void DicomWriter::WriteHeader(ofstream& dicomStream, DataSet* dataSet)
+void DicomWriter::WriteHeader(ofstream& dicomStream, DataSet dataSet)
 {
-	dicomStream.write(dataSet->GetPreamble(),128);
-	dicomStream.write(dataSet->GetPrefix(), 4);
+	dicomStream.write(dataSet.GetPreamble(),128);
+	dicomStream.write(dataSet.GetPrefix(), 4);
 }
 
-void DicomWriter::WriteDataElements(ofstream& dicomStream, DataSet* dataSet)
+void DicomWriter::WriteDataElements(ofstream& dicomStream, DataSet dataSet)
 {
 	//get bytes from data element and dump to file
+	for(auto element : dataSet.GetDataElements()) {
+
+	}
 }
 
 void DicomWriter::SortElements()
@@ -77,8 +101,10 @@ void DicomWriter::PadNullBytes(int count)
 	//pad with null(0x00) bytes
 }
 
-void DicomWriter::CheckDicomMandatoryTags()
+void DicomWriter::CheckDicomMandatoryTags(list<DataElement> element)
 {
 	//check for dicom mandatory tags. Like Transfer syntax etc.
-	throw MissingMandatoryTagException("Implement this method");
+	for(auto tag : this->mandatoryTags) {
+		throw MissingMandatoryTagException("Implement this method");
+	}
 }

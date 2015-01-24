@@ -30,24 +30,25 @@ namespace Dicomkit {
 			unsigned short valueType;
 			int valueLength;
 			unsigned char* valueField;
-			list<DataElement*> dataElements;	//Sequence items(SQ)
+			list<DataElement> dataElements;	//Sequence items(SQ)
 		public:
 			DataElement(void);
 			DataElement(const DataElement& dataElement);
 			~DataElement(void);
 
+			bool operator==(const DataElement& dataElement) const;
+
 			unsigned char* GetValueField();
 			int GetValueLength();
 			short GetValueType();
 			DicomTag GetDicomTag();
-			list<DataElement*> GetDataElements();
+			list<DataElement> GetDataElements();
 
 			void SetDicomTag(DicomTag tag);
 			void SetData(short valueType, int valueLength, unsigned char* valueField);
 			
 			void AddDataElement(DataElement dataElement);
-			void AddDataElement(DataElement* dataElement);
-			void RemoveDataElement(DataElement* dataElement);
+			void RemoveDataElement(DataElement dataElement);
 		};
 
 	}

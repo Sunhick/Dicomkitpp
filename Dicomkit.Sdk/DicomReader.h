@@ -45,7 +45,7 @@ namespace Dicomkit {
 			int ReadValueLength(short valueType);
 			DicomTag ReadDicomTag();
 			void ReadFileMetaData(DataSet& dataSet, TransferSyntax& syntax);
-			DataElement* ParseDataElement();
+			DataElement ParseDataElement();
 
 		public:
 			DicomReader(string fileName);

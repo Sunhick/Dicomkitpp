@@ -44,20 +44,10 @@ void DataSet::SetPrefix(char* prefix)
 
 void DataSet::AddDataElement(DataElement dataElement)
 {
-	this->dataElements.push_back(new DataElement(dataElement));
+	this->dataElements.push_back(DataElement(dataElement));
 }
 
-void DataSet::AddDataElement(DataElement* dataElement)
-{
-	this->dataElements.push_back(dataElement);
-}
-
-void DataSet::RemoveDataElement(DataElement* dataElement)
-{
-	this->dataElements.remove(dataElement);	
-}
-
-list<DataElement*> DataSet::GetDataElements()
+list<DataElement> DataSet::GetDataElements()
 {
 	return this->dataElements;
 }

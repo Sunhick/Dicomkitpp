@@ -12,10 +12,10 @@
 // 
 // You should have received a copy of the GNU General Public License
 // along with Dicomkit++.  If not, see <http://www.gnu.org/licenses/>.
+#include "DicomDump.h"
 
 #include <vector>
 
-#include "DicomDump.h"
 #include "../Dicomkit.Sdk/DataSet.h"
 #include "../Dicomkit.Sdk/DataParser.h"
 #include "../Dicomkit.Sdk/ValueRepresentation.h"
@@ -23,7 +23,7 @@
 using namespace std;
 using namespace Dicomkit::Dump;
 
-DicomDump::DicomDump(string fileName)
+DicomDump::DicomDump(string fileName) 
 {
 	this->fileName = fileName;
 	this->dicomReader = new DicomReader(fileName);
@@ -40,24 +40,20 @@ void DicomDump::Dump(ostream& out)
 	//this->dicomReader->Dump();
 
 	DataSet dataSet = this->dicomReader->ParseDicom();
-	list<DataElement*> dataElements = dataSet.GetDataElements();
+	list<DataElement> dataElements = dataSet.GetDataElements();
 
 	DumpLog(dataElements, out);
 }
 
-void DicomDump::DumpLog(list<DataElement*> dataElements, ostream& out)
+void DicomDump::DumpLog(list<DataElement> dataElements, ostream& out)
 {
-	for (list<DataElement*>::iterator dataElement1 = dataElements.begin();
-		dataElement1 != dataElements.end();
-		++dataElement1) {
+	for (auto dataElement : dataElements) {
 			string message;
 
-			DataElement* dataElement = *dataElement1;
-
-			unsigned short valueType = dataElement->GetValueType();
-			unsigned short groupId = dataElement->GetDicomTag().GroupId;
-			unsigned short elementId = dataElement->GetDicomTag().ElementId;
-			int valLen = dataElement->GetValueLength();
+			unsigned short valueType = dataElement.GetValueType();
+			unsigned short groupId = dataElement.GetDicomTag().GroupId;
+			unsigned short elementId = dataElement.GetDicomTag().ElementId;
+			int valLen = dataElement.GetValueLength();
 
 			//skip Item sequence.
 			if (groupId == 0xfffe && elementId == 0xe000) continue;
@@ -67,7 +63,7 @@ void DicomDump::DumpLog(list<DataElement*> dataElements, ostream& out)
 				{
 					out << GetLog(groupId, elementId, "FL");
 					
-					for(auto fl : DataParser::ParseFL(dataElement->GetValueField(), dataElement->GetValueLength())) 
+					for(auto fl : DataParser::ParseFL(dataElement.GetValueField(), dataElement.GetValueLength())) 
 						out << fl << " ";
 				}
 				break;
@@ -75,7 +71,7 @@ void DicomDump::DumpLog(list<DataElement*> dataElements, ostream& out)
 				{
 					out << GetLog(groupId, elementId, "SL");
 					
-					for(auto us : DataParser::ParseSL(dataElement->GetValueField(), dataElement->GetValueLength()))
+					for(auto us : DataParser::ParseSL(dataElement.GetValueField(), dataElement.GetValueLength()))
 						out << us << " ";
 				}
 				break;
@@ -83,7 +79,7 @@ void DicomDump::DumpLog(list<DataElement*> dataElements, ostream& out)
 				{
 					out << GetLog(groupId, elementId, "SS");
 
-					for(auto ss : DataParser::ParseSS(dataElement->GetValueField(), dataElement->GetValueLength()))
+					for(auto ss : DataParser::ParseSS(dataElement.GetValueField(), dataElement.GetValueLength()))
 						out << ss << " ";
 				}
 				break;
@@ -91,7 +87,7 @@ void DicomDump::DumpLog(list<DataElement*> dataElements, ostream& out)
 				{
 					out << GetLog(groupId, elementId, "UL");
 
-					for(auto ul : DataParser::ParseUL(dataElement->GetValueField(), dataElement->GetValueLength()))
+					for(auto ul : DataParser::ParseUL(dataElement.GetValueField(), dataElement.GetValueLength()))
 						out << ul << " ";
 				}
 				break;
@@ -99,102 +95,102 @@ void DicomDump::DumpLog(list<DataElement*> dataElements, ostream& out)
 				{
 					out << GetLog(groupId, elementId, "OB");
 					
-					for(auto ob : DataParser::ParseOB(dataElement->GetValueField(), dataElement->GetValueLength()))
+					for(auto ob : DataParser::ParseOB(dataElement.GetValueField(), dataElement.GetValueLength()))
 						out << (unsigned short)ob << " ";
 				}
 				break;
 			case UI:
 				{
 					out << GetLog(groupId, elementId, "UI") 
-						<< DataParser::ParseUI(dataElement->GetValueField(), valLen).c_str();
+						<< DataParser::ParseUI(dataElement.GetValueField(), valLen).c_str();
 				}
 				break;
 			case SH:
 				{
 					out << GetLog(groupId, elementId, "SH") 
-						<< DataParser::ParseSH(dataElement->GetValueField(), valLen).c_str() ;
+						<< DataParser::ParseSH(dataElement.GetValueField(), valLen).c_str() ;
 				}
 				break;
 			case AE:
 				{
 					out << GetLog(groupId, elementId, "AE")
-						<< DataParser::ParseAE(dataElement->GetValueField(), valLen).c_str();
+						<< DataParser::ParseAE(dataElement.GetValueField(), valLen).c_str();
 				}
 				break;
 			case CS:
 				{
 					out << GetLog(groupId, elementId, "CS")
-						<< DataParser::ParseCS(dataElement->GetValueField(), valLen).c_str();
+						<< DataParser::ParseCS(dataElement.GetValueField(), valLen).c_str();
 				}
 				break;
 			case DA:
 				{
 					out << GetLog(groupId, elementId, "DA")
-						<< DataParser::ParseDA(dataElement->GetValueField(), valLen).c_str();
+						<< DataParser::ParseDA(dataElement.GetValueField(), valLen).c_str();
 				}
 				break;
 			case TM:
 				{
 					out << GetLog(groupId, elementId, "TM")
-						<< DataParser::ParseTM(dataElement->GetValueField(), valLen).c_str();
+						<< DataParser::ParseTM(dataElement.GetValueField(), valLen).c_str();
 				}
 				break;
 			case LO:
 				{
 					out << GetLog(groupId, elementId, "LO")
-						<<DataParser::ParseLO(dataElement->GetValueField(), valLen).c_str();
+						<<DataParser::ParseLO(dataElement.GetValueField(), valLen).c_str();
 				}
 				break;
 			case PN:
 				{
 					out << GetLog(groupId, elementId, "PN")
-						<< DataParser::ParsePN(dataElement->GetValueField(), valLen).c_str();
+						<< DataParser::ParsePN(dataElement.GetValueField(), valLen).c_str();
 				}
 				break;
 			case SQ:
 				{
 					out << GetLog(groupId, elementId, "SQ");
 					out << "[-----------SEQ START-----------" << endl;
-					DumpLog(dataElement->GetDataElements(), out);
+					DumpLog(dataElement.GetDataElements(), out);
 					out << "-----------SEQ END-------------]";
 				}
 				break;
 			case AS:
 				{
 					out << GetLog(groupId, elementId, "AS") 
-						<<DataParser::ParseAS(dataElement->GetValueField(), valLen).c_str();
+						<<DataParser::ParseAS(dataElement.GetValueField(), valLen).c_str();
 				}
 				break;
 			case DS:
 				{
 					out << GetLog(groupId, elementId, "DS")
-						<< DataParser::ParseDS(dataElement->GetValueField(), valLen).c_str();
+						<< DataParser::ParseDS(dataElement.GetValueField(), valLen).c_str();
 				}
 				break;
 			case IS:
 				{
 					out << GetLog(groupId, elementId, "IS")
-						<< DataParser::ParseIS(dataElement->GetValueField(), valLen).c_str();
+						<< DataParser::ParseIS(dataElement.GetValueField(), valLen).c_str();
 				}
 				break;
 			case US:
 				{
 					out << GetLog(groupId, elementId, "US");
 					
-					for(auto us : DataParser::ParseUS(dataElement->GetValueField(), dataElement->GetValueLength()))
+					for(auto us : DataParser::ParseUS(dataElement.GetValueField(), dataElement.GetValueLength()))
 						out << us << " ";
 				}
 				break;
 			case LT:
 				{
 					out << GetLog(groupId, elementId, "LT")
-						<< DataParser::ParseLT(dataElement->GetValueField(), valLen).c_str();
+						<< DataParser::ParseLT(dataElement.GetValueField(), valLen).c_str();
 				}
 				break;
 			case ST:
 				{
 					out << GetLog(groupId, elementId, "ST")
-						<< DataParser::ParseST(dataElement->GetValueField(), valLen).c_str();
+						<< DataParser::ParseST(dataElement.GetValueField(), valLen).c_str();
 				}
 				break;
 			case OW:
@@ -202,8 +198,8 @@ void DicomDump::DumpLog(list<DataElement*> dataElements, ostream& out)
 					out << GetLog(groupId, elementId, "OW");	//mostly pixel data.
 
 					// uncommented below code for printing out hex re-presentation of pixel data
-					/*unsigned char* data = dataElement->GetValueField();
-					for (int i = 0; i  < dataElement->GetValueLength(); i++) {
+					/*unsigned char* data = dataElement.GetValueField();
+					for (int i = 0; i  < dataElement.GetValueLength(); i++) {
 					out << hex << (unsigned short)*(data+i) << " ";
 					}*/
 				}
@@ -211,7 +207,7 @@ void DicomDump::DumpLog(list<DataElement*> dataElements, ostream& out)
 			case AT:
 				{
 					out << GetLog(groupId, elementId, "AT");
-					DicomTag tag = DataParser::ParseAT(dataElement->GetValueField(), dataElement->GetValueLength());
+					DicomTag tag = DataParser::ParseAT(dataElement.GetValueField(), dataElement.GetValueLength());
 
 					char buf[20];
 					sprintf_s(buf, sizeof(buf), "(%04x,%04x)", tag.GroupId, tag.ElementId);

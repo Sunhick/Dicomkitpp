@@ -30,21 +30,22 @@ namespace Dicomkit {
 		class DicomWriter
 		{
 		private:
-			DataSet* dataSet;
+			DataSet dataSet;
+			list<DicomTag> mandatoryTags;
 			void Init();
 
-			void WriteHeader(ofstream& dicomStream, DataSet* dataSet);
-			void WriteDataElements(ofstream& dicomStream, DataSet* dataSet);
+			void WriteHeader(ofstream& dicomStream, DataSet dataSet);
+			void WriteDataElements(ofstream& dicomStream, DataSet dataSet);
 			void SortElements();
 			void PadNullBytes(int count);
-			void CheckDicomMandatoryTags();
+			void CheckDicomMandatoryTags(list<DataElement> element);
 		public:
 			DicomWriter(void);
 			~DicomWriter(void);
 
 			void AddDataElement(DataElement dataElement);
 			void Save(string fileName);
-			void Save(DataSet* dataSet, string fileName);
+			void Save(DataSet dataSet, string fileName);
 		};
 
 		class MissingMandatoryTagException : public exception 

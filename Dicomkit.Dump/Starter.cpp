@@ -36,11 +36,11 @@ int main(int argc, char** argv)
 		DicomDump *dcmDump = new DicomDump(dcmFile);
 		dcmDump->Dump(cout);
 
-		//DicomReader reader(dcmFile);
-		//DataSet ds = reader.ParseDicom();
+		DicomReader reader(dcmFile);
+		DataSet ds = reader.ParseDicom();
 
-		//DicomWriter writer;
-		//writer.Save(&ds,"G:\\image.dcm");
+	/*	DicomWriter writer;
+		writer.Save(&ds,"G:\\image.dcm");*/
 	}
 	catch(exception e)
 	{
