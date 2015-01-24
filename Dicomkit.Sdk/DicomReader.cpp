@@ -14,6 +14,7 @@
 // along with Dicomkit++.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "DicomReader.h"
+
 #include "ValueRepresentation.h"
 #include "InvalidDicomFileException.h"
 

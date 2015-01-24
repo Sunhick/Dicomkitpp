@@ -39,8 +39,8 @@ int main(int argc, char** argv)
 		DicomReader reader(dcmFile);
 		DataSet ds = reader.ParseDicom();
 
-	/*	DicomWriter writer;
-		writer.Save(&ds,"G:\\image.dcm");*/
+		DicomWriter writer;
+		writer.Save(&ds,"G:\\image.dcm");
 	}
 	catch(exception e)
 	{

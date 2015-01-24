@@ -12,10 +12,9 @@
 // 
 // You should have received a copy of the GNU General Public License
 // along with Dicomkit++.  If not, see <http://www.gnu.org/licenses/>.
+#include "DataSet.h"
 
 #include <string>
-
-#include "DataSet.h"
 
 using namespace std;
 using namespace Dicomkit::Sdk;

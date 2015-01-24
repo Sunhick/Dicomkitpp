@@ -17,6 +17,7 @@
 #define DATA_ELEMENT_H
 
 #include <list>
+
 #include "DicomTag.h"
 
 using namespace std;

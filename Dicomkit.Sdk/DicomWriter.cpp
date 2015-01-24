@@ -26,9 +26,8 @@ DicomWriter::~DicomWriter(void)
 {
 }
 
-void DicomWriter::Init()
-{
-	dataSet = DataSet();
+void DicomWriter::Init() {
+	dataSet = new DataSet();
 	
 	//patient mandatory tags
 	this->mandatoryTags.push_back(DicomTag(0x0008,0x0005));
@@ -53,20 +52,18 @@ void DicomWriter::Init()
 	this->mandatoryTags.push_back(DicomTag(0x0020,0x0013));
 }
 
-void DicomWriter::AddDataElement(DataElement dataElement)
-{
-	this->dataSet.AddDataElement(dataElement);
+void DicomWriter::AddDataElement(DataElement dataElement) {
+	this->dataSet->AddDataElement(dataElement);
 }
 
-void DicomWriter::Save(string fileName)
-{
+void DicomWriter::Save(string fileName) {
 	SortElements();
 	Save(this->dataSet,fileName);
 }
 
-void DicomWriter::Save(DataSet dataSet, string fileName)
-{
-	CheckDicomMandatoryTags(dataSet.GetDataElements());
+void DicomWriter::Save(DataSet* dataSet, string fileName) throw() {
+	if(CheckDicomMandatoryTags(dataSet->GetDataElements()))
+		throw exception("Dataset doesn't contain mandatory tags");
 
 	ofstream dicomStream(fileName, ios::binary | ios::out);
 
@@ -77,34 +74,35 @@ void DicomWriter::Save(DataSet dataSet, string fileName)
 	dicomStream.close();
 }
 
-void DicomWriter::WriteHeader(ofstream& dicomStream, DataSet dataSet)
-{
-	dicomStream.write(dataSet.GetPreamble(),128);
-	dicomStream.write(dataSet.GetPrefix(), 4);
+void DicomWriter::WriteHeader(ofstream& dicomStream, DataSet* dataSet) {
+	dicomStream.write(dataSet->GetPreamble(),128);
+	dicomStream.write(dataSet->GetPrefix(), 4);
 }
 
-void DicomWriter::WriteDataElements(ofstream& dicomStream, DataSet dataSet)
-{
+void DicomWriter::WriteDataElements(ofstream& dicomStream, DataSet* dataSet) {
+	this->SortElements(dataSet);
+
 	//get bytes from data element and dump to file
-	for(auto element : dataSet.GetDataElements()) {
+	for(auto element : dataSet->GetDataElements()) {
 
 	}
 }
 
-void DicomWriter::SortElements()
-{
+void DicomWriter::SortElements(DataSet* dataSet) {
 	//sort the elements based on dicom tags. suggested in dicom part 05 
 }
 
-void DicomWriter::PadNullBytes(int count)
-{
+void DicomWriter::PadNullBytes(int count) {
 	//pad with null(0x00) bytes
 }
 
-void DicomWriter::CheckDicomMandatoryTags(list<DataElement> element)
+bool DicomWriter::CheckDicomMandatoryTags(list<DataElement> elements)
 {
 	//check for dicom mandatory tags. Like Transfer syntax etc.
 	for(auto tag : this->mandatoryTags) {
-		throw MissingMandatoryTagException("Implement this method");
+
+		//throw MissingMandatoryTagException("Implement this method");
 	}
+
+	return true;
 }
