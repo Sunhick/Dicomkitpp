@@ -91,7 +91,8 @@ DataSet DicomReader::ParseDicom()
 		throw exception("Not implemented! Currently Explicit and Little endian encoded Dicom images are parsed.");
 	}
 
-
+	// close dcm file after parsing it
+	reader->close();
 	return dataSet;
 }
 

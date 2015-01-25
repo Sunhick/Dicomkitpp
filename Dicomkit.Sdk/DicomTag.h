@@ -16,6 +16,11 @@
 #ifndef DICOM_TAG
 #define DICOM_TAG
 
+#include <sstream>
+#include <iomanip>
+
+using namespace std;
+
 namespace Dicomkit {
 	namespace Sdk {
 		struct DicomTag {
@@ -32,6 +37,12 @@ namespace Dicomkit {
 
 			bool operator==(const DicomTag& tag) const {
 				return (tag.GroupId == this->GroupId && tag.ElementId == this->ElementId);
+			}
+
+			string ToString() {
+				ostringstream tag;
+				tag << "( " << hex << GroupId << " , " << ElementId << " )" ;
+				return tag.str();
 			}
 		};
 

@@ -15,15 +15,16 @@
 
 #include "DicomWriter.h"
 
+#include "ValueRepresentation.h"
+
 using namespace Dicomkit::Sdk;
 
-DicomWriter::DicomWriter(void)
-{
+DicomWriter::DicomWriter(void) {
 	Init();
 }
 
-DicomWriter::~DicomWriter(void)
-{
+DicomWriter::~DicomWriter(void) {
+
 }
 
 void DicomWriter::Init() {
@@ -61,15 +62,15 @@ void DicomWriter::Save(string fileName) {
 	Save(this->dataSet,fileName);
 }
 
-void DicomWriter::Save(DataSet* dataSet, string fileName) throw() {
-	if(!CheckDicomMandatoryTags(dataSet->GetDataElements()))
-		throw exception("Dataset doesn't contain mandatory tags");
+void DicomWriter::Save(DataSet* dataSet, string fileName) {
+	CheckDicomMandatoryTags(dataSet->GetDataElements());
 
 	ofstream dicomStream(fileName, ios::binary | ios::out);
 
 	WriteHeader(dicomStream, dataSet);
 
-	WriteDataElements(dicomStream, dataSet);
+	dataSet->SortDataElements();
+	WriteDataElements(dicomStream, dataSet->GetDataElements());
 
 	dicomStream.close();
 }
@@ -79,35 +80,54 @@ void DicomWriter::WriteHeader(ofstream& dicomStream, DataSet* dataSet) {
 	dicomStream.write(dataSet->GetPrefix(), 4);
 }
 
-void DicomWriter::WriteDataElements(ofstream& dicomStream, DataSet* dataSet) {
-	this->SortElements(dataSet);
-
-	//get bytes from data element and dump to file
-	for(auto element : dataSet->GetDataElements()) {
+void DicomWriter::WriteDataElements(ofstream& dicomStream, list<DataElement> elements) {
+	// get bytes from data element and dump to file
+	for(auto element : elements) {
 		DicomTag tag = element.GetDicomTag();
 		unsigned char* value = element.GetValueField();
 		int length = element.GetValueLength();
 		short type = element.GetValueType();
 
-		
+		if(type == SQ) {
+			auto sqSet = element.GetDataElements();
+			this->WriteDataElements(dicomStream, sqSet);
+		}
+
+		// FixMe: Write data in correct format
+
+		// write tag
+		dicomStream.write((const char*)&tag.GroupId,2);
+		dicomStream.write((const char*)&tag.ElementId,2);
+
+		// write VT
+		dicomStream.write((const char*)&type,2);
+
+		// write value length
+		dicomStream.write((const char*)&length,4);
+
+		// write value
+		dicomStream.write((const char*)&value,length);
 	}
 }
 
 void DicomWriter::SortElements(DataSet* dataSet) {
-	//sort the elements based on dicom tags. suggested in dicom part 05 
+	// sort the elements based on dicom tags. suggested in dicom part 05 
 	dataSet->SortDataElements();
 }
 
 void DicomWriter::PadNullBytes(int count) {
-	//pad with null(0x00) bytes
+	// pad with null(0x00) bytes
 }
 
 bool DicomWriter::CheckDicomMandatoryTags(list<DataElement> elements)
 {
 	//check for dicom mandatory tags. Like Transfer syntax etc.
+	bool found = false;
 	for(auto tag : this->mandatoryTags) {
+		for(auto element : elements)
+			if(element.GetDicomTag() == tag) found = true;
 
-		//throw MissingMandatoryTagException("Implement this method");
+		if(!found) throw MissingMandatoryTagException("Missing tag:" + tag.ToString());
 	}
 
 	return true;

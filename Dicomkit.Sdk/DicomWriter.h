@@ -34,7 +34,7 @@ namespace Dicomkit {
 			void Init();
 
 			void WriteHeader(ofstream& dicomStream, DataSet* dataSet);
-			void WriteDataElements(ofstream& dicomStream, DataSet* dataSet);
+			void WriteDataElements(ofstream& dicomStream, list<DataElement> elements);
 			void SortElements(DataSet* dataSet);
 			void PadNullBytes(int count);
 			bool CheckDicomMandatoryTags(list<DataElement> element) throw();
@@ -50,6 +50,7 @@ namespace Dicomkit {
 		class MissingMandatoryTagException : public exception 
 		{
 		public:
+			MissingMandatoryTagException(string msg) : exception(msg.c_str()) {}
 			MissingMandatoryTagException(char* message) : exception(message) {}
 			MissingMandatoryTagException() : exception() {}
 			~MissingMandatoryTagException() {}
