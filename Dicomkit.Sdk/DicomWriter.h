@@ -27,8 +27,7 @@ using namespace std;
 
 namespace Dicomkit {
 	namespace Sdk {
-		class DicomWriter
-		{
+		class DicomWriter {
 		private:
 			DataSet* dataSet;
 			list<DicomTag> mandatoryTags;

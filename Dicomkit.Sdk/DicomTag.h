@@ -18,8 +18,7 @@
 
 namespace Dicomkit {
 	namespace Sdk {
-		struct DicomTag
-		{
+		struct DicomTag {
 		public:
 			DicomTag(){}
 

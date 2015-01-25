@@ -27,9 +27,7 @@ using namespace std;
 
 namespace Dicomkit {
 	namespace Sdk {
-
-		class DicomReader 
-		{
+		class DicomReader {
 		private:
 			string fileName;
 			size_t fileLength;

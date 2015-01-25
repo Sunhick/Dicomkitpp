@@ -26,9 +26,7 @@ using namespace Dicomkit::Sdk;
 
 namespace Dicomkit {
 	namespace Dump {
-
-		class DicomDump
-		{
+		class DicomDump {
 		private:
 			string fileName;
 			DicomReader* dicomReader;

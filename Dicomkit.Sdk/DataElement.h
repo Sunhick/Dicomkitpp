@@ -24,8 +24,7 @@ using namespace std;
 
 namespace Dicomkit {
 	namespace Sdk {
-		class DataElement
-		{
+		class DataElement {
 		private:
 			DicomTag dicomTag;
 			unsigned short valueType;
@@ -42,7 +41,7 @@ namespace Dicomkit {
 			unsigned char* GetValueField();
 			int GetValueLength();
 			short GetValueType();
-			DicomTag GetDicomTag();
+			DicomTag GetDicomTag() const;
 			list<DataElement> GetDataElements();
 
 			void SetDicomTag(DicomTag tag);

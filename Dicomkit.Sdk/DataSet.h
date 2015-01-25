@@ -24,8 +24,7 @@ using namespace std;
 
 namespace Dicomkit {
 	namespace Sdk {
-		class DataSet
-		{
+		class DataSet {
 		private:
 			char preamble[128];					//128 bit preamble
 			char prefix[4];						//4 bit dicom prefix "DICM"
@@ -41,6 +40,7 @@ namespace Dicomkit {
 			char* GetPreamble();
 			char* GetPrefix();
 
+			void SortDataElements();
 			bool IsEmpty();
 			void AddDataElement(DataElement dataElement);
 			void RemoveDataElement(DataElement* dataElement);

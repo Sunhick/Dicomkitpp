@@ -12,6 +12,7 @@
 // 
 // You should have received a copy of the GNU General Public License
 // along with Dicomkit++.  If not, see <http://www.gnu.org/licenses/>.
+
 #include "DataSet.h"
 
 #include <string>
@@ -19,49 +20,51 @@
 using namespace std;
 using namespace Dicomkit::Sdk;
 
-DataSet::DataSet(void)
-{
+DataSet::DataSet(void) {
 }
 
-DataSet::~DataSet(void)
-{
-	////delete list of data elements
-	//for(list<DataElement*>::iterator it = dataElements.begin(); 
-	//	it != dataElements.end(); 
-	//	++it) delete *it;
+DataSet::~DataSet(void) {
+	this->dataElements.clear();
 }
 
-void DataSet::SetPreamble(char* preamble)
-{
+void DataSet::SetPreamble(char* preamble) {
 	memcpy(this->preamble,preamble,128);
 }
 
-void DataSet::SetPrefix(char* prefix)
-{
+void DataSet::SetPrefix(char* prefix) {
 	memcpy(this->prefix, prefix,4);
 }
 
-void DataSet::AddDataElement(DataElement dataElement)
-{
+void DataSet::AddDataElement(DataElement dataElement) {
 	this->dataElements.push_back(DataElement(dataElement));
 }
 
-list<DataElement> DataSet::GetDataElements()
-{
+list<DataElement> DataSet::GetDataElements() {
 	return this->dataElements;
 }
 
-char* DataSet::GetPreamble()
-{
+char* DataSet::GetPreamble() {
 	return this->preamble;
 }
 
-char* DataSet::GetPrefix()
-{
+char* DataSet::GetPrefix() {
 	return this->prefix;
 }
 
-bool DataSet::IsEmpty()
-{
+bool DataSet::IsEmpty() {
 	return (this->dataElements.size() > 0);
+}
+
+void DataSet::SortDataElements() {
+	this->dataElements.sort( [](const DataElement& first, const DataElement& second) 
+								{
+									auto firstTag = first.GetDicomTag();
+									auto secondTag = second.GetDicomTag();
+
+									// primary sort key: Group Id.
+									// secondary sort key: Element Id
+									return (firstTag.GroupId == secondTag.GroupId) ?
+										firstTag.ElementId < secondTag.ElementId 
+										: firstTag.GroupId < secondTag.GroupId;
+								});
 }

@@ -55,8 +55,7 @@ using namespace std;
 
 namespace Dicomkit {
 	namespace Sdk {
-		class TransferSyntax
-		{
+		class TransferSyntax {
 		private:
 			bool isImplicitVr;
 			bool isLittleEndian;
@@ -74,8 +73,7 @@ namespace Dicomkit {
 			void SetTransferSyntaxUid(string uid);
 		};
 
-		class NotSupportedTransferSyntax : public exception 
-		{
+		class NotSupportedTransferSyntax : public exception {
 		public:
 			NotSupportedTransferSyntax(char* message) : exception(message) {}
 			NotSupportedTransferSyntax() : exception() {}

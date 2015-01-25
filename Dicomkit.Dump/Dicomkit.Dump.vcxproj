@@ -66,8 +66,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="DicomDump.cpp" />
-    <ClCompile Include="Starter.cpp" />
+    <ClCompile Include="DicomDump.cc" />
+    <ClCompile Include="Starter.cc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DicomDump.h" />

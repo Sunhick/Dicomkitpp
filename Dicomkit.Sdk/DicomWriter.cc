@@ -57,12 +57,12 @@ void DicomWriter::AddDataElement(DataElement dataElement) {
 }
 
 void DicomWriter::Save(string fileName) {
-	SortElements();
+	SortElements(this->dataSet);
 	Save(this->dataSet,fileName);
 }
 
 void DicomWriter::Save(DataSet* dataSet, string fileName) throw() {
-	if(CheckDicomMandatoryTags(dataSet->GetDataElements()))
+	if(!CheckDicomMandatoryTags(dataSet->GetDataElements()))
 		throw exception("Dataset doesn't contain mandatory tags");
 
 	ofstream dicomStream(fileName, ios::binary | ios::out);
@@ -84,12 +84,18 @@ void DicomWriter::WriteDataElements(ofstream& dicomStream, DataSet* dataSet) {
 
 	//get bytes from data element and dump to file
 	for(auto element : dataSet->GetDataElements()) {
+		DicomTag tag = element.GetDicomTag();
+		unsigned char* value = element.GetValueField();
+		int length = element.GetValueLength();
+		short type = element.GetValueType();
 
+		
 	}
 }
 
 void DicomWriter::SortElements(DataSet* dataSet) {
 	//sort the elements based on dicom tags. suggested in dicom part 05 
+	dataSet->SortDataElements();
 }
 
 void DicomWriter::PadNullBytes(int count) {

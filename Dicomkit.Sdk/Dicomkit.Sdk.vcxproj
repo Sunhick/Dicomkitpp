@@ -75,13 +75,13 @@
     <ClInclude Include="ValueRepresentation.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DataElement.cpp" />
-    <ClCompile Include="DataParser.cpp" />
-    <ClCompile Include="DataSet.cpp" />
-    <ClCompile Include="DicomReader.cpp" />
-    <ClCompile Include="DicomWriter.cpp" />
-    <ClCompile Include="InvalidDicomFileException.cpp" />
-    <ClCompile Include="TransferSyntax.cpp" />
+    <ClCompile Include="DataElement.cc" />
+    <ClCompile Include="DataParser.cc" />
+    <ClCompile Include="DataSet.cc" />
+    <ClCompile Include="DicomReader.cc" />
+    <ClCompile Include="DicomWriter.cc" />
+    <ClCompile Include="InvalidDicomFileException.cc" />
+    <ClCompile Include="TransferSyntax.cc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

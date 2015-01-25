@@ -22,9 +22,7 @@ using namespace std;
 
 namespace Dicomkit {
 	namespace Sdk {
-		class InvalidDicomFileException :
-			public exception
-		{
+		class InvalidDicomFileException : public exception {
 		public:
 			InvalidDicomFileException(const char* message);
 			~InvalidDicomFileException(void);

@@ -15,10 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Starter.cpp">
+    <ClCompile Include="Starter.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DicomDump.cpp">
+    <ClCompile Include="DicomDump.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

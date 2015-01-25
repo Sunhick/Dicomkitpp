@@ -19,12 +19,10 @@
 using namespace std;
 using namespace Dicomkit::Sdk;
 
-DataElement::DataElement(void)
-{
+DataElement::DataElement(void) {
 }
 
-DataElement::DataElement(const DataElement& dataElement)
-{
+DataElement::DataElement(const DataElement& dataElement) {
 	this->dicomTag = DicomTag(dataElement.dicomTag.GroupId,dataElement.dicomTag.ElementId);
 	this->valueLength = dataElement.valueLength;
 	this->valueType  = dataElement.valueType;
@@ -33,27 +31,21 @@ DataElement::DataElement(const DataElement& dataElement)
 	memcpy(this->valueField,dataElement.valueField,this->valueLength);
 }
 
-DataElement::~DataElement(void)
-{
-	//delete valueField;
-
-	////delete list of data elements
-	//for(list<DataElement*>::iterator it = dataElements.begin(); 
-	//	it != dataElements.end(); 
-	//	++it) delete *it;
+DataElement::~DataElement(void) {
+	this->dataElements.clear();
 }
 
 bool DataElement::operator==(const DataElement& dataElement) const {
 	return (this->dicomTag == dataElement.dicomTag);
 }
 
-void DataElement::SetDicomTag(DicomTag tag)
-{
+void DataElement::SetDicomTag(DicomTag tag) {
 	this->dicomTag = tag;
 }
 
-void DataElement::SetData(short valueType, int valueLength, unsigned char* valueField)
-{
+void DataElement::SetData(short valueType, 
+						  int valueLength, 
+						  unsigned char* valueField) {
 	this->valueLength = valueLength;
 	this->valueType = valueType;
 
@@ -61,37 +53,30 @@ void DataElement::SetData(short valueType, int valueLength, unsigned char* value
 	memcpy(this->valueField,valueField,this->valueLength);
 }
 
-unsigned char* DataElement:: GetValueField()
-{
+unsigned char* DataElement:: GetValueField() {
 	return this->valueField;
 }
 
-int  DataElement::GetValueLength()
-{
+int  DataElement::GetValueLength() {
 	return this->valueLength;
 }
 
-short  DataElement::GetValueType()
-{
+short  DataElement::GetValueType() {
 	return this->valueType;
 }
 
-DicomTag  DataElement::GetDicomTag()
-{
+DicomTag  DataElement::GetDicomTag() const {
 	return this->dicomTag;
 }
 
-void DataElement::AddDataElement(DataElement dataElement)
-{
+void DataElement::AddDataElement(DataElement dataElement) {
 	this->dataElements.push_back(dataElement);
 }
 
-void DataElement::RemoveDataElement(DataElement dataElement)
-{
+void DataElement::RemoveDataElement(DataElement dataElement) {
 	this->dataElements.remove(dataElement);
 }
 
-list<DataElement> DataElement::GetDataElements()
-{
+list<DataElement> DataElement::GetDataElements() {
 	return this->dataElements;
 }

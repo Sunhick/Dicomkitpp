@@ -24,8 +24,7 @@ using namespace std;
 
 namespace Dicomkit {
 	namespace Sdk {
-		class DataParser
-		{
+		class DataParser {
 		public:
 			static vector<float> ParseFL(unsigned char* data, int length);			//floating point single VR
 			static vector<long> ParseSL(unsigned char* data, int length);			//signed long VR

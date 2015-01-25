@@ -44,25 +44,25 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DicomReader.cpp">
+    <ClCompile Include="TransferSyntax.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="InvalidDicomFileException.cpp">
+    <ClCompile Include="InvalidDicomFileException.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DataSet.cpp">
+    <ClCompile Include="DicomWriter.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DataElement.cpp">
+    <ClCompile Include="DicomReader.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DicomWriter.cpp">
+    <ClCompile Include="DataSet.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TransferSyntax.cpp">
+    <ClCompile Include="DataParser.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DataParser.cpp">
+    <ClCompile Include="DataElement.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
